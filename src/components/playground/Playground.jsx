@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { sound } from '../../utils/soundEngine';
+import { PLAYGROUND_TEMPLATES } from '../../data/playgroundTemplates';
 import { 
   Terminal, 
   Play, 
@@ -8,13 +9,26 @@ import {
   Database, 
   FileCode,
   Smartphone,
-  Monitor
+  Monitor,
+  Sparkles,
+  Layers,
+  Wand2,
+  X,
+  ChevronRight,
+  Gamepad2,
+  RotateCcw,
+  Check
 } from 'lucide-react';
 
 export const Playground = () => {
   const [sandboxType, setSandboxType] = useState('web'); // 'web' | 'python' | 'sql'
   const [mobileTab, setMobileTab] = useState('editor'); // 'editor' | 'preview'
   const [webEditorTab, setWebEditorTab] = useState('html'); // 'html' | 'css' | 'js'
+
+  // Starter Templates State
+  const [showTemplateModal, setShowTemplateModal] = useState(false);
+  const [selectedTemplateCategory, setSelectedTemplateCategory] = useState('All');
+  const [loadedTemplateTitle, setLoadedTemplateTitle] = useState('Default Sandbox');
 
   // Web sandbox state
   const [htmlCode, setHtmlCode] = useState(`<div class="card">
@@ -68,7 +82,7 @@ button {
 }`);
 
   const [jsCode, setJsCode] = useState(`console.log("Playground ready.");`);
-  const [webPreviewSrc, setWebPreviewSrc] = useState('');
+  const [webPreviewSrc, setWebPreviewSrc] = useState(`<!DOCTYPE html><html><head><meta name="viewport" content="width=device-width, initial-scale=1.0" /><style>body { font-family: system-ui, sans-serif; background: #0a0d14; color: #fff; display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; padding: 16px; box-sizing: border-box; } .card { background: #111726; border: 1px solid #1e293b; border-radius: 16px; padding: 24px; text-align: center; box-shadow: 0 10px 30px rgba(0,242,254,0.15); max-width: 320px; width: 100%; } h2 { color: #00f2fe; margin-top: 0; font-size: 1.25rem; } p { color: #94a3b8; font-size: 13px; line-height: 1.5; } button { background: linear-gradient(135deg, #00f2fe, #9d4edd); color: #fff; border: none; padding: 10px 20px; border-radius: 8px; font-weight: bold; cursor: pointer; width: 100%; margin-top: 8px; }</style></head><body><div class="card"><h2>⚡ ByteVerse Sandbox</h2><p>Edit HTML, CSS, and JS live on any device!</p><button onclick="alert('Hello from ByteVerse Mobile & Desktop!')">Tap Me</button></div><script>console.log("Playground ready.");<\/script></body></html>`);
 
   // Python sandbox state
   const [pythonCode, setPythonCode] = useState(`# Python Mobile & Desktop Runner
@@ -93,6 +107,105 @@ ORDER BY xp DESC;`);
     { username: 'CyberValkyrie', level: 12, xp: 1240, rank_title: 'System Architect' },
     { username: 'ShadowCoder', level: 7, xp: 750, rank_title: 'Algorithm Master' }
   ]);
+
+  const DEFAULT_HTML = `<div class="card">
+  <h2>⚡ ByteVerse Sandbox</h2>
+  <p>Edit HTML, CSS, and JS live on any device!</p>
+  <button onclick="alert('Hello from ByteVerse Mobile & Desktop!')">Tap Me</button>
+</div>`;
+
+  const DEFAULT_CSS = `body {
+  font-family: system-ui, sans-serif;
+  background: #0a0d14;
+  color: #fff;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  margin: 0;
+  padding: 16px;
+  box-sizing: border-box;
+}
+.card {
+  background: #111726;
+  border: 1px solid #1e293b;
+  border-radius: 16px;
+  padding: 24px;
+  text-align: center;
+  box-shadow: 0 10px 30px rgba(0,242,254,0.15);
+  max-width: 320px;
+  width: 100%;
+}
+h2 {
+  color: #00f2fe;
+  margin-top: 0;
+  font-size: 1.25rem;
+}
+p {
+  color: #94a3b8;
+  font-size: 13px;
+  line-height: 1.5;
+}
+button {
+  background: linear-gradient(135deg, #00f2fe, #9d4edd);
+  color: #fff;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 8px;
+  font-weight: bold;
+  cursor: pointer;
+  width: 100%;
+  margin-top: 8px;
+}`;
+
+  const DEFAULT_JS = `console.log("Playground ready.");`;
+
+  const handleLoadTemplate = (tpl) => {
+    sound.playCorrect();
+    setHtmlCode(tpl.html);
+    setCssCode(tpl.css);
+    setJsCode(tpl.js);
+    setLoadedTemplateTitle(tpl.title);
+    setShowTemplateModal(false);
+
+    const fullDoc = `
+      <!DOCTYPE html>
+      <html>
+        <head>
+          <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+          <style>${tpl.css}</style>
+        </head>
+        <body>
+          ${tpl.html}
+          <script>${tpl.js}<\/script>
+        </body>
+      </html>
+    `;
+    setWebPreviewSrc(fullDoc);
+    setMobileTab('preview');
+  };
+
+  const handleResetDefault = () => {
+    sound.playClick();
+    setHtmlCode(DEFAULT_HTML);
+    setCssCode(DEFAULT_CSS);
+    setJsCode(DEFAULT_JS);
+    setLoadedTemplateTitle('Default Sandbox');
+    const fullDoc = `
+      <!DOCTYPE html>
+      <html>
+        <head>
+          <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+          <style>${DEFAULT_CSS}</style>
+        </head>
+        <body>
+          ${DEFAULT_HTML}
+          <script>${DEFAULT_JS}<\/script>
+        </body>
+      </html>
+    `;
+    setWebPreviewSrc(fullDoc);
+  };
 
   const handleRunWeb = () => {
     sound.playClick();
@@ -209,6 +322,85 @@ Learned Skills:
           </button>
         </div>
       </div>
+
+      {/* 1-Click Starter Templates Bar (Web Sandbox) */}
+      {sandboxType === 'web' && (
+        <div className="p-3.5 sm:p-4 rounded-2xl bg-gradient-to-r from-cyan-950/40 via-slate-900/80 to-purple-950/40 border border-cyan-500/30 shadow-lg space-y-3">
+          <div className="flex items-center justify-between flex-wrap gap-2">
+            <div className="flex items-center gap-2">
+              <span className="p-1.5 rounded-lg bg-cyan-500/20 text-cyan-300">
+                <Sparkles size={16} />
+              </span>
+              <div>
+                <h3 className="text-xs sm:text-sm font-bold text-white flex items-center gap-1.5">
+                  <span>1-Click Starter Presets</span>
+                  <span className="px-2 py-0.5 rounded-full text-[10px] bg-cyan-500/20 text-cyan-300 border border-cyan-500/30 font-mono">
+                    15 Templates
+                  </span>
+                </h3>
+                <p className="text-[11px] text-slate-400 hidden sm:block">
+                  Launch ready-to-run arcade games, CSS FX, and mini-apps instantly.
+                </p>
+              </div>
+            </div>
+
+            <button
+              onClick={() => {
+                sound.playClick();
+                setShowTemplateModal(true);
+              }}
+              className="px-3.5 py-1.5 rounded-xl bg-gradient-to-r from-cyan-500 via-blue-500 to-purple-600 hover:from-cyan-400 hover:to-purple-500 text-slate-950 font-bold text-xs flex items-center gap-1.5 shadow-md active:scale-95 transition-all"
+            >
+              <Wand2 size={13} className="text-slate-950 fill-current" />
+              <span>Browse All 15 Templates »</span>
+            </button>
+          </div>
+
+          {/* Quick Pill Carousel */}
+          <div className="flex items-center gap-2 overflow-x-auto touch-scroll pb-1">
+            {PLAYGROUND_TEMPLATES.slice(0, 7).map((tpl) => (
+              <button
+                key={tpl.id}
+                onClick={() => handleLoadTemplate(tpl)}
+                className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs transition-all whitespace-nowrap active:scale-95 group shadow-sm ${
+                  loadedTemplateTitle === tpl.title
+                    ? 'bg-cyan-500/20 border border-cyan-400 text-cyan-300 font-bold'
+                    : 'bg-slate-900/90 hover:bg-slate-800 border border-slate-700/80 hover:border-cyan-400 text-slate-200'
+                }`}
+              >
+                <span className="text-sm">{tpl.icon}</span>
+                <span className="group-hover:text-cyan-300">{tpl.title}</span>
+              </button>
+            ))}
+            <button
+              onClick={() => {
+                sound.playClick();
+                setShowTemplateModal(true);
+              }}
+              className="flex items-center gap-1 px-3 py-1.5 rounded-xl bg-cyan-500/10 border border-cyan-500/30 text-cyan-400 hover:bg-cyan-500/20 text-xs font-bold whitespace-nowrap"
+            >
+              <span>+8 More...</span>
+              <ChevronRight size={13} />
+            </button>
+          </div>
+
+          {/* Current Loaded Indicator */}
+          {loadedTemplateTitle && loadedTemplateTitle !== 'Default Sandbox' && (
+            <div className="flex items-center justify-between text-[11px] bg-slate-950/80 px-3 py-1.5 rounded-xl border border-slate-800/80">
+              <span className="text-slate-300 flex items-center gap-1.5 font-mono">
+                <span className="text-cyan-400 animate-pulse">●</span> Active Preset: <strong className="text-white">{loadedTemplateTitle}</strong>
+              </span>
+              <button
+                onClick={handleResetDefault}
+                className="flex items-center gap-1 text-[11px] text-slate-400 hover:text-amber-400 underline transition-colors"
+              >
+                <RotateCcw size={11} />
+                <span>Reset to Blank</span>
+              </button>
+            </div>
+          )}
+        </div>
+      )}
 
       {/* WEB SANDBOX */}
       {sandboxType === 'web' && (
@@ -397,6 +589,123 @@ Learned Skills:
                   ))}
                 </tbody>
               </table>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* 15 TEMPLATES MODAL DRAWER */}
+      {showTemplateModal && (
+        <div 
+          className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-6 bg-slate-950/80 backdrop-blur-md animate-fadeIn"
+          onClick={() => setShowTemplateModal(false)}
+        >
+          <div 
+            className="w-full max-w-4xl max-h-[90vh] bg-slate-900 border border-cyan-500/30 rounded-2xl sm:rounded-3xl shadow-2xl flex flex-col overflow-hidden"
+            onClick={(e) => e.stopPropagation()}
+          >
+            {/* Modal Header */}
+            <div className="p-4 sm:p-6 border-b border-slate-800 bg-gradient-to-r from-slate-900 via-cyan-950/30 to-purple-950/30 flex items-center justify-between">
+              <div>
+                <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-cyan-500/20 text-cyan-300 border border-cyan-500/30 text-[11px] font-mono font-bold mb-1">
+                  <Sparkles size={12} />
+                  <span>BYTEVERSE TEMPLATE VAULT</span>
+                </div>
+                <h2 className="text-lg sm:text-2xl font-black text-white">
+                  1-Click Ready-to-Run Starter Presets
+                </h2>
+                <p className="text-xs text-slate-400 mt-1 max-w-xl">
+                  Pick any full working game, CSS animation, UI widget, or web app. Click to load, hack the code, and see changes in real-time!
+                </p>
+              </div>
+              <button
+                onClick={() => setShowTemplateModal(false)}
+                className="p-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white transition-colors"
+                title="Close"
+              >
+                <X size={20} />
+              </button>
+            </div>
+
+            {/* Filter Category Tabs */}
+            <div className="px-4 sm:px-6 py-3 border-b border-slate-800 bg-slate-900/60 flex items-center gap-2 overflow-x-auto touch-scroll">
+              {['All', 'Mini-Games', 'Visual FX', 'UI & Widgets', 'Web Apps'].map((cat) => {
+                const count = cat === 'All' 
+                  ? PLAYGROUND_TEMPLATES.length 
+                  : PLAYGROUND_TEMPLATES.filter(t => t.category === cat).length;
+                const isActive = selectedTemplateCategory === cat;
+                return (
+                  <button
+                    key={cat}
+                    onClick={() => {
+                      sound.playClick();
+                      setSelectedTemplateCategory(cat);
+                    }}
+                    className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all whitespace-nowrap flex items-center gap-1.5 ${
+                      isActive
+                        ? 'bg-cyan-500 text-slate-950 shadow-md font-black'
+                        : 'bg-slate-800 text-slate-300 hover:bg-slate-700'
+                    }`}
+                  >
+                    <span>{cat}</span>
+                    <span className={`text-[10px] px-1.5 py-0.2 rounded-full ${
+                      isActive ? 'bg-slate-950/30 text-slate-950' : 'bg-slate-900 text-slate-400'
+                    }`}>
+                      {count}
+                    </span>
+                  </button>
+                );
+              })}
+            </div>
+
+            {/* Template Cards Grid */}
+            <div className="p-4 sm:p-6 overflow-y-auto space-y-4 max-h-[calc(90vh-190px)]">
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4">
+                {PLAYGROUND_TEMPLATES
+                  .filter(t => selectedTemplateCategory === 'All' || t.category === selectedTemplateCategory)
+                  .map((t) => (
+                    <div
+                      key={t.id}
+                      className="group relative bg-slate-950/70 hover:bg-slate-900 border border-slate-800 hover:border-cyan-500/60 rounded-2xl p-4 transition-all duration-200 flex flex-col justify-between hover:shadow-xl hover:shadow-cyan-500/10"
+                    >
+                      <div>
+                        <div className="flex items-start justify-between gap-2 mb-2">
+                          <div className="text-2xl p-2 rounded-xl bg-slate-900 border border-slate-800 group-hover:scale-110 transition-transform">
+                            {t.icon}
+                          </div>
+                          <span className="text-[10px] px-2 py-0.5 rounded-full bg-slate-800 text-cyan-300 font-mono border border-slate-700">
+                            {t.category}
+                          </span>
+                        </div>
+                        <h3 className="font-bold text-white text-sm group-hover:text-cyan-300 transition-colors">
+                          {t.title}
+                        </h3>
+                        <p className="text-xs text-slate-400 mt-1 line-clamp-2 leading-relaxed">
+                          {t.description}
+                        </p>
+                      </div>
+
+                      <button
+                        onClick={() => handleLoadTemplate(t)}
+                        className="mt-4 w-full py-2 px-3 rounded-xl bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-slate-950 font-bold text-xs flex items-center justify-center gap-1.5 active:scale-95 transition-all shadow-md"
+                      >
+                        <Play size={13} className="fill-current" />
+                        <span>Launch in Sandbox</span>
+                      </button>
+                    </div>
+                  ))}
+              </div>
+            </div>
+
+            {/* Modal Footer */}
+            <div className="p-3 sm:p-4 border-t border-slate-800 bg-slate-950/60 flex items-center justify-between text-xs text-slate-400 flex-wrap gap-2">
+              <span>💡 Tip: All starter code is 100% editable inside HTML, CSS, and JS tabs!</span>
+              <button
+                onClick={() => setShowTemplateModal(false)}
+                className="px-4 py-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-white font-semibold transition-colors"
+              >
+                Close
+              </button>
             </div>
           </div>
         </div>
