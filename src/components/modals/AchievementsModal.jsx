@@ -17,7 +17,9 @@ import {
   Database,
   Server,
   Layers,
-  BookOpen
+  BookOpen,
+  Zap,
+  Skull
 } from 'lucide-react';
 
 const iconMap = {
@@ -30,7 +32,9 @@ const iconMap = {
   Layers: Layers,
   Flame: Flame,
   Users: Users,
-  BookOpen: BookOpen
+  BookOpen: BookOpen,
+  Zap: Zap,
+  Skull: Skull
 };
 
 export const AchievementsModal = () => {

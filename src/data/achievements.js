@@ -86,5 +86,21 @@ export const ACHIEVEMENTS = [
     icon: 'BookOpen',
     color: 'text-teal-400',
     bg: 'bg-teal-500/10 border-teal-500/30'
+  },
+  {
+    id: 'code_sprinter',
+    title: 'Speed Demon',
+    description: 'Score over 400 points in 60-Second Code Sprint Mode',
+    icon: 'Zap',
+    color: 'text-amber-400',
+    bg: 'bg-amber-500/10 border-amber-500/30'
+  },
+  {
+    id: 'boss_slayer',
+    title: 'Syntax Slayer',
+    description: 'Defeat The Syntax Devourer in the Cyber Boss Raid',
+    icon: 'Skull',
+    color: 'text-rose-500',
+    bg: 'bg-rose-500/10 border-rose-500/30'
   }
 ];

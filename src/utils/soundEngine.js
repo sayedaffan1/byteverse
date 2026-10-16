@@ -84,6 +84,23 @@ class SoundEngine {
   playCardFlip() {
     this.playTone(450, 'sine', 0.05, 0.06);
   }
+
+  playHit() {
+    // Punchy zap
+    this.playTone(320, 'sawtooth', 0.08, 0.18, 0);
+    this.playTone(480, 'sine', 0.1, 0.12, 0.03);
+  }
+
+  playExplosion() {
+    // Deep rumbling blast
+    this.playTone(120, 'sawtooth', 0.25, 0.25, 0);
+    this.playTone(90, 'triangle', 0.4, 0.22, 0.08);
+    this.playTone(60, 'sine', 0.6, 0.3, 0.16);
+  }
+
+  playCountdown() {
+    this.playTone(600, 'sine', 0.06, 0.08);
+  }
 }
 
 export const sound = new SoundEngine();
