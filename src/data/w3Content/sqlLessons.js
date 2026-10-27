@@ -316,5 +316,121 @@ export const SQL_W3_LESSONS = [
       "correct": 1,
       "hint": "WHERE filters individual rows; HAVING filters grouped aggregate results."
     }
+  },
+  {
+    "id": "sql_distinct",
+    "category": "SQL Basic Queries",
+    "title": "SQL SELECT DISTINCT",
+    "summary": "The SELECT DISTINCT statement is used to return only distinct (different) values, removing all duplicate records from the query result.",
+    "eli5": {
+      "story": "If you ask a classroom of 30 kids what country their parents were born in, 10 might say Canada, 10 might say India, and 10 might say Japan. If you just want a list of unique countries without hearing 'Canada' ten times in a row, you ask for DISTINCT answers!",
+      "analogy": "✂️ The Duplicate Remover: DISTINCT filters out duplicates so you only see unique values once.",
+      "rules": [
+        "SELECT DISTINCT column FROM table; eliminates duplicate values.",
+        "COUNT(DISTINCT column) counts unique items.",
+        "Works across multiple columns to return unique row combinations."
+      ]
+    },
+    "body": "### Syntax:\n```sql\nSELECT DISTINCT Country FROM Customers;\nSELECT COUNT(DISTINCT Country) FROM Customers;\n```",
+    "tryItCode": "SELECT DISTINCT Country FROM Customers ORDER BY Country ASC;",
+    "codeType": "sql",
+    "exercise": {
+      "question": "Which SQL keyword eliminates duplicate rows from a query result set?",
+      "options": [
+        "DIFFERENT",
+        "UNIQUE",
+        "DISTINCT",
+        "ISOLATE"
+      ],
+      "correct": 2,
+      "hint": "It is SELECT DISTINCT."
+    }
+  },
+  {
+    "id": "sql_like_wildcards",
+    "category": "SQL Filtering & Sorting",
+    "title": "SQL LIKE Operator & Wildcards",
+    "summary": "The LIKE operator is used in a WHERE clause to search for a specified pattern in a column using % and _ wildcards.",
+    "eli5": {
+      "story": "Imagine searching your music playlist for songs that start with 'Cyber'. You don't know the full name, just the start! In SQL, the percent sign % is like a magic wild card in uno that matches any number of unknown letters!",
+      "analogy": "🃏 The Wildcard Joker: % matches zero, one, or 100 characters; _ matches exactly one single character.",
+      "rules": [
+        "WHERE name LIKE 'A%' finds names starting with 'A'.",
+        "WHERE name LIKE '%son' finds names ending with 'son'.",
+        "WHERE name LIKE '%or%' finds names having 'or' anywhere in the word."
+      ]
+    },
+    "body": "### Common Wildcard Patterns:\n- `'a%'`: Finds values that start with \"a\"\n- `'%a'`: Finds values that end with \"a\"\n- `'%or%'`: Finds values that have \"or\" in any position\n- `'_r%'`: Finds values that have \"r\" in the second position\n- `'a_%'`: Starts with \"a\" and is at least 2 characters long",
+    "tryItCode": "SELECT CustomerName, City, Country \nFROM Customers \nWHERE City LIKE 'Lon%';",
+    "codeType": "sql",
+    "exercise": {
+      "question": "Which wildcard in SQL represents zero, one, or multiple unknown characters?",
+      "options": [
+        "Question mark (?)",
+        "Asterisk (*)",
+        "Percent sign (%)",
+        "Underscore (_)"
+      ],
+      "correct": 2,
+      "hint": "In SQL, the percent sign (%) matches multiple characters."
+    }
+  },
+  {
+    "id": "sql_left_right_join",
+    "category": "SQL Joins",
+    "title": "SQL LEFT & RIGHT JOINs",
+    "summary": "Outer joins (LEFT JOIN, RIGHT JOIN) return all rows from one table, even if there are no matching rows in the other table.",
+    "eli5": {
+      "story": "Imagine every student in a class has a lunchbox, but some forgot theirs at home today! If you do an INNER JOIN, you only count kids who have a lunchbox. But with a LEFT JOIN, every single student stays on the list, even if their lunchbox column is blank (NULL)!",
+      "analogy": "📋 The Inclusive Roll Call: LEFT JOIN keeps every single row from the left table, filling blanks with NULLs.",
+      "rules": [
+        "LEFT JOIN returns all rows from the Left table + matched right rows.",
+        "If no match exists on the right side, columns contain NULL.",
+        "RIGHT JOIN returns all rows from the Right table."
+      ]
+    },
+    "body": "### Syntax of LEFT JOIN:\n```sql\nSELECT Customers.CustomerName, Orders.OrderID\nFROM Customers\nLEFT JOIN Orders ON Customers.CustomerID = Orders.CustomerID\nORDER BY Customers.CustomerName;\n```",
+    "tryItCode": "SELECT Customers.CustomerName, Orders.OrderID, Orders.OrderDate\nFROM Customers\nLEFT JOIN Orders ON Customers.CustomerID = Orders.CustomerID\nWHERE Orders.OrderID IS NULL;",
+    "codeType": "sql",
+    "exercise": {
+      "question": "What value fills the right-hand columns in a LEFT JOIN when there is no matching record?",
+      "options": [
+        "0",
+        "EMPTY",
+        "NULL",
+        "FALSE"
+      ],
+      "correct": 2,
+      "hint": "Unmatched fields return NULL."
+    }
+  },
+  {
+    "id": "sql_constraints",
+    "category": "SQL Database Management (DDL)",
+    "title": "SQL Constraints & Keys",
+    "summary": "SQL constraints are used to specify rules for the data in a table, ensuring accuracy and reliability (PRIMARY KEY, FOREIGN KEY, NOT NULL).",
+    "eli5": {
+      "story": "Imagine a passport office. The computer has strict rules: Every citizen must have a Social Security Number that is 100% unique (PRIMARY KEY). You cannot leave the birthdate blank (NOT NULL). And children must be linked to a real registered parent (FOREIGN KEY)! Constraints are those safety rules for databases.",
+      "analogy": "🛡️ The Bouncer at the Door: Constraints reject invalid or duplicate data before it can corrupt the database.",
+      "rules": [
+        "PRIMARY KEY uniquely identifies each row (cannot be NULL).",
+        "FOREIGN KEY prevents actions that would destroy links between tables.",
+        "NOT NULL ensures a column cannot store blank/empty values."
+      ]
+    },
+    "body": "### Common SQL Constraints:\n- `NOT NULL`: Column cannot have NULL value.\n- `UNIQUE`: All values in column must be distinct.\n- `PRIMARY KEY`: Unique identifier (`NOT NULL` + `UNIQUE`).\n- `FOREIGN KEY`: Uniquely identifies a row in another table (referential integrity).\n- `CHECK`: Ensures values in a column satisfy a boolean condition (e.g. `age >= 18`).\n- `DEFAULT`: Sets a default fallback value if none is specified.",
+    "tryItCode": "CREATE TABLE Players (\n    PlayerID INT AUTO_INCREMENT PRIMARY KEY,\n    Username VARCHAR(50) NOT NULL UNIQUE,\n    XP INT DEFAULT 0,\n    CreatedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP\n);",
+    "codeType": "sql",
+    "exercise": {
+      "question": "Which constraint uniquely identifies each record in a database table and cannot contain NULL values?",
+      "options": [
+        "FOREIGN KEY",
+        "CHECK",
+        "PRIMARY KEY",
+        "DEFAULT"
+      ],
+      "correct": 2,
+      "hint": "It is the PRIMARY KEY."
+    }
   }
 ];

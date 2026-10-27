@@ -376,5 +376,122 @@ export const PYTHON_W3_LESSONS = [
       "correct": 1,
       "hint": "__init__(self)"
     }
+  },
+  {
+    "id": "py_list_comprehension",
+    "category": "Python Lists & Loops",
+    "title": "Python List Comprehensions",
+    "summary": "List comprehension offers a shorter, more readable syntax when you want to create a new list based on the values of an existing list.",
+    "eli5": {
+      "story": "Suppose you want to pick out all even numbers from 0 to 10. Normally you write a big for loop with 4 lines of code. But with List Comprehension, Python lets you say: 'Give me x for every x in range(10) if x is even' all in a single super-fast line!",
+      "analogy": "⚡ One-Liner Magic: List comprehensions replace clunky for-loops and append() calls with one elegant sentence.",
+      "rules": [
+        "Syntax: [expression for item in iterable if condition == True].",
+        "Much faster execution than standard append loops.",
+        "Can also be used for dictionary comprehensions {k: v for ...}!"
+      ]
+    },
+    "body": "### Syntax & Examples:\n```python\n# Traditional Loop:\nnumbers = [1, 2, 3, 4, 5]\nsquares = []\nfor n in numbers:\n    squares.append(n ** 2)\n\n# List Comprehension:\nsquares = [n ** 2 for n in numbers]\nevens = [n for n in numbers if n % 2 == 0]\n```",
+    "tryItCode": "heroes = [\"cyber ninja\", \"neon phantom\", \"byte wizard\", \"code titan\"]\n# Title-case all hero names in 1 line:\nuppercase_heroes = [h.title() for h in heroes if \"cyber\" not in h]\nprint(\"Original:\", heroes)\nprint(\"Processed List Comprehension:\", uppercase_heroes)",
+    "codeType": "python",
+    "exercise": {
+      "question": "What is the output of `[x * 2 for x in [1, 2, 3]]`?",
+      "options": [
+        "[1, 2, 3, 1, 2, 3]",
+        "[2, 4, 6]",
+        "[2, 2, 2]",
+        "SyntaxError"
+      ],
+      "correct": 1,
+      "hint": "Each number (1, 2, 3) is multiplied by 2: [2, 4, 6]."
+    }
+  },
+  {
+    "id": "py_lambda",
+    "category": "Python Functions",
+    "title": "Python Lambda Functions",
+    "summary": "A lambda function is a small anonymous function that can take any number of arguments, but can only have one expression.",
+    "eli5": {
+      "story": "Sometimes you just need a quick helper tool for 2 seconds to double a number or sort high scores, and you don't want to write a full def function() with names and returns. A lambda is a quick throwaway helper you write right on the spot!",
+      "analogy": "🛵 The Quick Scooter: A lambda is a tiny inline function without a name for quick calculations.",
+      "rules": [
+        "lambda arguments : expression",
+        "Can have any number of arguments, but only ONE expression.",
+        "Commonly used inside sorted(), filter(), and map()."
+      ]
+    },
+    "body": "### Syntax & Examples:\n```python\n# Simple double function\ndouble = lambda x: x * 2\nprint(double(5)) # 10\n\n# Multi-argument lambda\nmultiply = lambda a, b: a * b\nprint(multiply(4, 5)) # 20\n\n# Sorting players by high score with lambda key:\nplayers = [(\"Affan\", 950), (\"Sarah\", 1200), (\"Leo\", 600)]\nplayers.sort(key=lambda p: p[1], reverse=True)\n```",
+    "tryItCode": "players = [\n  {\"name\": \"Affan\", \"xp\": 1200},\n  {\"name\": \"Elena\", \"xp\": 1950},\n  {\"name\": \"Kai\", \"xp\": 800}\n]\n# Sort by XP descending using lambda key:\nleaderboard = sorted(players, key=lambda p: p[\"xp\"], reverse=True)\nfor rank, p in enumerate(leaderboard, 1):\n    print(f\"#{rank} {p['name']}: {p['xp']} XP\")",
+    "codeType": "python",
+    "exercise": {
+      "question": "Which keyword creates small anonymous inline functions in Python?",
+      "options": [
+        "def",
+        "anon",
+        "lambda",
+        "inline"
+      ],
+      "correct": 2,
+      "hint": "It is lambda."
+    }
+  },
+  {
+    "id": "py_try_except",
+    "category": "Python Advanced",
+    "title": "Python Exception Handling (try...except)",
+    "summary": "The try block lets you test a block of code for errors, the except block handles the error, and finally executes code regardless of the result.",
+    "eli5": {
+      "story": "When a trapeze artist flies through the air at the circus, there is always a big safety net underneath. If they slip, the net catches them so nobody gets hurt! In Python, try...except is that safety net so your program doesn't crash if something goes wrong!",
+      "analogy": "🎪 The Circus Safety Net: try tests dangerous actions; except catches errors and keeps the game running smoothly.",
+      "rules": [
+        "try: run the risky code.",
+        "except ErrorType: catch and handle the error gracefully.",
+        "finally: code that always runs at the end (like closing database files)."
+      ]
+    },
+    "body": "### Syntax:\n```python\ntry:\n    number = int(input(\"Enter a number: \"))\n    result = 100 / number\n    print(result)\nexcept ZeroDivisionError:\n    print(\"Cannot divide by zero!\")\nexcept ValueError:\n    print(\"Invalid input, please enter digits only!\")\nexcept Exception as e:\n    print(f\"Unexpected error: {e}\")\nfinally:\n    print(\"Execution finished cleanly.\")\n```",
+    "tryItCode": "def safe_division(a, b):\n    try:\n        return a / b\n    except ZeroDivisionError:\n        return \"⚠️ Error: Division by zero is undefined!\"\n\nprint(\"10 / 2 =\", safe_division(10, 2))\nprint(\"10 / 0 =\", safe_division(10, 0))",
+    "codeType": "python",
+    "exercise": {
+      "question": "Which block in Python always executes regardless of whether an exception was raised or not?",
+      "options": [
+        "catch",
+        "finally",
+        "always",
+        "guarantee"
+      ],
+      "correct": 1,
+      "hint": "It is finally."
+    }
+  },
+  {
+    "id": "py_file_handling",
+    "category": "Python Advanced",
+    "title": "Python File Handling & with open()",
+    "summary": "File handling is an important part of any application. Python has several functions for creating, reading, updating, and deleting files.",
+    "eli5": {
+      "story": "Imagine opening a notebook, writing your secret diary entry, and then closing the notebook and putting it in your desk drawer. In Python, you can open files on your computer to read stories or save game logs, and the with statement guarantees the book is safely closed when you are done!",
+      "analogy": "📖 The Notebook: open('save.txt', 'w') writes fresh text; 'r' reads the text back.",
+      "rules": [
+        "'r' opens for reading (default).",
+        "'w' opens for writing (overwrites existing content).",
+        "'a' opens for appending to the end of the file.",
+        "Always use 'with open(...) as f:' so files close automatically!"
+      ]
+    },
+    "body": "### Modern Context Manager Syntax:\n```python\n# Writing to a file\nwith open(\"game_log.txt\", \"w\") as f:\n    f.write(\"Affan scored 2500 XP in Boss Raid!\\n\")\n\n# Reading from a file\nwith open(\"game_log.txt\", \"r\") as f:\n    content = f.read()\n    print(content)\n```",
+    "tryItCode": "# Simulated file read/write logic\nfile_buffer = {}\n\ndef write_file(filename, text):\n    file_buffer[filename] = text\n    return f\"💾 Successfully wrote {len(text)} bytes to '{filename}'\"\n\ndef read_file(filename):\n    return file_buffer.get(filename, \"File not found\")\n\nprint(write_file(\"scores.txt\", \"Player 1: 500 XP\\nPlayer 2: 950 XP\"))\nprint(\"Contents of scores.txt:\\n\" + read_file(\"scores.txt\"))",
+    "codeType": "python",
+    "exercise": {
+      "question": "Which statement in Python ensures that a file stream is closed automatically even if an exception occurs?",
+      "options": [
+        "using open()",
+        "with open()",
+        "auto open()",
+        "safe_open()"
+      ],
+      "correct": 1,
+      "hint": "It is the 'with' statement context manager."
+    }
   }
 ];

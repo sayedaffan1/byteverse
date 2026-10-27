@@ -441,5 +441,354 @@ export const HTML_W3_LESSONS = [
       "correct": 2,
       "hint": "It is called \"controls\"."
     }
+  },
+  {
+    "id": "html_styles",
+    "category": "HTML Styles & Colors",
+    "title": "HTML Styles (Inline CSS)",
+    "summary": "The HTML style attribute is used to add styles to an element, such as color, font, size, and background.",
+    "eli5": {
+      "story": "Imagine you have a plain wooden toy car. It works fine, but it is just plain wood! The style attribute is your magic paintbrush that paints it neon blue, turns the wheels shiny silver, and gives it a giant racing stripe!",
+      "analogy": "🎨 Magic Paintbrush: style='color:red' paints any word or box in your favorite shade instantly.",
+      "rules": [
+        "Write style=\"property:value;\" inside the opening tag.",
+        "Use color: to paint the text.",
+        "Use background-color: to paint behind the text."
+      ]
+    },
+    "body": "### The HTML Style Attribute:\nTo style an HTML element directly, use the `style` attribute:\n```html\n<p style=\"color:red;\">I am a red paragraph.</p>\n<p style=\"color:blue; font-size:20px;\">I am big and blue.</p>\n```\n\n### Core Properties:\n- `background-color`: Sets the background color of an element.\n- `color`: Sets the text color.\n- `font-family`: Defines the font to be used (e.g. Arial, 'Courier New', sans-serif).\n- `font-size`: Defines the text size (e.g. 18px, 1.5rem, 150%).\n- `text-align`: Defines the horizontal alignment (`left`, `center`, `right`, `justify`).",
+    "tryItCode": "<div style=\"background:#0f172a; padding:24px; border-radius:12px; border:1px solid #334155; text-align:center;\">\n  <h1 style=\"color:#00f2fe; font-family:'Courier New', monospace; font-size:26px; margin:0;\">Neon Terminal</h1>\n  <p style=\"color:#e2e8f0; font-size:15px; margin-top:8px;\">Styled with pure HTML inline style attributes!</p>\n  <button style=\"background:#10b981; color:#0f172a; font-weight:bold; padding:10px 20px; border-radius:8px; border:none; cursor:pointer;\">Launch Mission</button>\n</div>",
+    "codeType": "html",
+    "tips": "Always separate multiple CSS rules with semicolons (;) inside the style quotation marks.",
+    "exercise": {
+      "question": "Which CSS property inside a style attribute sets the background color of an element?",
+      "options": [
+        "bgcolor",
+        "background-color",
+        "color-background",
+        "canvas-color"
+      ],
+      "correct": 1,
+      "hint": "It is written with a hyphen: background-color."
+    }
+  },
+  {
+    "id": "html_quotations",
+    "category": "HTML Text Formatting",
+    "title": "HTML Quotations & Citations",
+    "summary": "HTML contains special quotation and citation elements to mark quotes, abbreviations, addresses, and citations.",
+    "eli5": {
+      "story": "When you repeat what your teacher or superhero said in a story, you put quotation marks around their words so everyone knows who said it. HTML has elements like <blockquote> and <abbr> that tell computers 'Hey, this is an official quote from someone else!'",
+      "analogy": "📜 The Speech Scroll: <blockquote> indents and showcases an important speech from someone famous.",
+      "rules": [
+        "<blockquote> is for long quotes from other sources.",
+        "<q> adds small inline quotation marks around words.",
+        "<abbr title='...'> shows what letters stand for when you hover over them."
+      ]
+    },
+    "body": "### Quotation Elements in HTML:\n- `<blockquote>`: Defines a section that is quoted from another source. Browsers usually indent `<blockquote>` elements.\n- `<q>`: Defines a short inline quotation. Browsers normally insert quotation marks around the quotation.\n- `<abbr title=\"...\">`: Defines an abbreviation or an acronym (hovering reveals full text).\n- `<address>`: Defines contact information for the author/owner of a document.\n- `<cite>`: Defines the title of a work (e.g. a book, poem, song, movie).\n- `<bdo dir=\"rtl\">`: Bi-Directional Override (inverts reading direction, right-to-left).",
+    "tryItCode": "<div style=\"background:#0f172a; padding:20px; border-radius:12px; color:#e2e8f0; font-family:sans-serif;\">\n  <p>Affan says: <q style=\"color:#38bdf8;\">Code is pure digital wizardry.</q></p>\n  <blockquote cite=\"https://affansayed.vercel.app\" style=\"border-left:4px solid #10b981; margin:16px 0; padding-left:16px; color:#94a3b8; font-style:italic;\">\n    \"Anyone can learn to program if you explain it simply from the ground up.\"\n  </blockquote>\n  <p>Learn more about <abbr title=\"HyperText Markup Language\" style=\"color:#f59e0b; text-decoration:underline;\">HTML</abbr> today!</p>\n</div>",
+    "codeType": "html",
+    "exercise": {
+      "question": "Which HTML element specifies an abbreviation or acronym with an explanatory tooltip?",
+      "options": [
+        "<acronym>",
+        "<abbr>",
+        "<tooltip>",
+        "<short>"
+      ],
+      "correct": 1,
+      "hint": "It is short for abbreviation: <abbr>."
+    }
+  },
+  {
+    "id": "html_comments",
+    "category": "HTML Basics",
+    "title": "HTML Comments",
+    "summary": "HTML comments are not displayed in the browser, but they help document your HTML source code and debug errors.",
+    "eli5": {
+      "story": "Imagine you are building a secret fort with your best friend, and you write secret notes on the back of the cardboard boxes that only you can read. In HTML, comments are secret notes for programmers that the website visitor never sees on the screen!",
+      "analogy": "🤫 Secret Whispers: Computers ignore comments, but other human coders love reading them!",
+      "rules": [
+        "Comments start with <!-- and end with -->.",
+        "Anything inside the comment is completely invisible on the webpage.",
+        "Great for turning off broken code temporarily while testing."
+      ]
+    },
+    "body": "### Syntax of HTML Comments:\n```html\n<!-- This is a single line comment -->\n\n<p>This paragraph is visible on screen.</p>\n\n<!--\n  This is a multi-line comment.\n  You can hide large chunks of code for debugging!\n  <button>Disabled Button</button>\n-->\n```\n\n### Why Use Comments?\n1. **Documentation**: Explain what a section of code does for your team or your future self.\n2. **Debugging**: Quickly disable broken elements without deleting your hard work.\n3. **Section Dividers**: Organize long web pages into logical chapters (e.g. `<!-- START NAVIGATION -->`).",
+    "tryItCode": "<div style=\"font-family:sans-serif; background:#0f172a; padding:20px; border-radius:12px; color:#e2e8f0;\">\n  <!-- This title shows up: -->\n  <h2 style=\"color:#10b981;\">Visible Content</h2>\n  <p>The comment below is hidden from the rendered page:</p>\n  <!-- <p style=\"color:red;\">YOU CANNOT SEE THIS SECRET MESSAGE!</p> -->\n  <p style=\"font-size:12px; color:#94a3b8;\">Inspect page source to see the hidden message!</p>\n</div>",
+    "codeType": "html",
+    "exercise": {
+      "question": "Which of the following is the correct syntax for an HTML comment?",
+      "options": [
+        "// This is a comment",
+        "/* This is a comment */",
+        "<!-- This is a comment -->",
+        "# This is a comment"
+      ],
+      "correct": 2,
+      "hint": "It begins with <!-- and ends with -->."
+    }
+  },
+  {
+    "id": "html_colors",
+    "category": "HTML Styles & Colors",
+    "title": "HTML Colors (HEX, RGB, HSL)",
+    "summary": "HTML colors are specified using predefined color names, or RGB, HEX, HSL, RGBA, and HSLA values.",
+    "eli5": {
+      "story": "When you mix red, green, and blue paint from your art box, you can create every color in the whole universe! On your computer screen, tiny red, green, and blue light bulbs shine together. When all three shine at full power (255), you get bright pure white light!",
+      "analogy": "🌈 The 3-Color Spotlight: Mixing Red, Green, and Blue light creates millions of stunning colors.",
+      "rules": [
+        "RGB values range from 0 (off) to 255 (maximum brightness).",
+        "HEX colors start with a hashtag # followed by 6 hex letters/numbers like #00f2fe.",
+        "RGBA adds an 'A' for Alpha transparency: rgba(0, 0, 0, 0.5) is half see-through glass!"
+      ]
+    },
+    "body": "### Color Representation in HTML:\n1. **Color Names**: 140 standard color names are supported (`Red`, `MediumSeaGreen`, `Cyan`, `DarkSlateBlue`).\n2. **RGB**: `rgb(red, green, blue)` where each value is between 0 and 255.\n3. **HEX**: `#RRGGBB` where RR, GG, and BB are hexadecimal values between 00 and FF (e.g. `#ff0000` is pure red).\n4. **RGBA**: `rgba(red, green, blue, alpha)` where alpha is between 0.0 (fully transparent) and 1.0 (fully opaque).\n5. **HSL**: `hsl(hue, saturation, lightness)` where hue is 0-360 degrees on the color wheel.",
+    "tryItCode": "<div style=\"display:flex; flex-direction:column; gap:10px; font-family:sans-serif;\">\n  <div style=\"background:rgb(255, 99, 71); color:white; padding:12px; border-radius:8px; font-weight:bold;\">\n    rgb(255, 99, 71) - Tomato Red\n  </div>\n  <div style=\"background:#00f2fe; color:#0f172a; padding:12px; border-radius:8px; font-weight:bold;\">\n    #00f2fe - Cyber Neon Cyan (HEX)\n  </div>\n  <div style=\"background:rgba(16, 185, 129, 0.3); border:1px solid #10b981; color:#10b981; padding:12px; border-radius:8px; font-weight:bold;\">\n    rgba(16, 185, 129, 0.3) - Glassmorphism Green with 30% Alpha\n  </div>\n</div>",
+    "codeType": "html",
+    "exercise": {
+      "question": "What does the 'A' represent in RGBA color syntax?",
+      "options": [
+        "Algorithm",
+        "Alpha (Opacity / Transparency)",
+        "Ambient Light",
+        "Automatic brightness"
+      ],
+      "correct": 1,
+      "hint": "Alpha defines how transparent or see-through the color is."
+    }
+  },
+  {
+    "id": "html_favicon",
+    "category": "HTML Head & Metadata",
+    "title": "HTML Favicon",
+    "summary": "A favicon is a small image displayed next to the page title in the browser tab, in bookmarks, and in search shortcuts.",
+    "eli5": {
+      "story": "Look at the tabs at the top of your web browser right now! Each tab has a tiny picture logo next to the title — YouTube has a red play button, Google has a multi-colored G. That tiny picture is called a Favicon (Favorite Icon)!",
+      "analogy": "🏷️ The Tab Flag: A favicon is like the tiny mascot flag hoisted on your browser tab.",
+      "rules": [
+        "Favicons are placed inside the <head> element.",
+        "Use <link rel='icon' type='image/x-icon' href='favicon.ico'>.",
+        "Square images (32x32 or 64x64 pixels) work best."
+      ]
+    },
+    "body": "### Adding a Favicon to HTML:\nTo add a favicon to your website, save your favicon image to your web root and add a `<link>` tag inside `<head>`:\n```html\n<!DOCTYPE html>\n<html>\n<head>\n  <title>ByteVerse Academy</title>\n  <link rel=\"icon\" type=\"image/x-icon\" href=\"/favicon.ico\">\n</head>\n<body>\n  <h1>Welcome!</h1>\n</body>\n</html>\n```\n\n### Modern Formats Supported:\n- `.ico`: Supported by all historical browsers.\n- `.png`: Excellent for high-resolution retina screens.\n- `.svg`: Vector favicons that adapt automatically to dark mode / light mode!",
+    "tryItCode": "<div style=\"background:#0f172a; padding:20px; border-radius:12px; border:1px solid #334155; font-family:sans-serif;\">\n  <div style=\"background:#1e293b; padding:10px 16px; border-radius:8px; display:inline-flex; items-center; gap:8px; align-items:center;\">\n    <span style=\"font-size:18px;\">🚀</span>\n    <span style=\"color:#fff; font-size:13px; font-weight:bold;\">ByteVerse - Coding Academy</span>\n    <span style=\"color:#64748b; font-size:12px; margin-left:12px;\">&times;</span>\n  </div>\n  <p style=\"color:#94a3b8; font-size:12px; margin-top:12px;\">The rocket emoji above represents how your favicon appears on the browser tab!</p>\n</div>",
+    "codeType": "html",
+    "exercise": {
+      "question": "Which HTML tag and rel attribute is used to link a favicon to a web page?",
+      "options": [
+        "<meta rel=\"favicon\">",
+        "<link rel=\"icon\">",
+        "<img rel=\"tabicon\">",
+        "<icon src=\"...\">"
+      ],
+      "correct": 1,
+      "hint": "It is <link rel=\"icon\" ...>."
+    }
+  },
+  {
+    "id": "html_iframes",
+    "category": "HTML Advanced Layout",
+    "title": "HTML Iframes",
+    "summary": "An HTML iframe is used to display a web page within a web page (inline frame).",
+    "eli5": {
+      "story": "Imagine your bedroom has a magical picture frame on the wall that shows a live video of Disneyland or your favorite video game in real-time. An <iframe> is a magical window cut into your website that peeks into another website completely!",
+      "analogy": "🪟 The Magic Window: <iframe> embeds maps, YouTube videos, or sandboxes directly onto your page.",
+      "rules": [
+        "<iframe src='URL'> defines the page to show inside the frame.",
+        "Always specify width and height in pixels or percentages.",
+        "Use title='...' for accessibility and screen readers."
+      ]
+    },
+    "body": "### Syntax of HTML Iframes:\n```html\n<iframe src=\"https://example.com\" width=\"600\" height=\"400\" title=\"Example Frame\">\n</iframe>\n```\n\n### Key Attributes:\n- `src`: The address of the document to embed in the iframe.\n- `title`: Essential for accessibility (describes iframe content).\n- `loading=\"lazy\"`: Defers loading until the iframe is near the viewport (speeds up page load).\n- `allowfullscreen`: Allows the iframe to open in fullscreen mode (essential for videos).\n- `sandbox`: Restricts scripts and forms inside the frame for security.",
+    "tryItCode": "<div style=\"background:#0f172a; padding:16px; border-radius:12px; border:1px solid #334155; text-align:center;\">\n  <h4 style=\"color:#38bdf8; margin:0 0 12px 0;\">Embedded Wikipedia Iframe</h4>\n  <iframe \n    src=\"https://en.wikipedia.org/wiki/HTML\" \n    width=\"100%\" \n    height=\"220\" \n    style=\"border:1px solid #475569; border-radius:8px; background:#fff;\"\n    title=\"Wikipedia HTML Article\"\n  ></iframe>\n</div>",
+    "codeType": "html",
+    "exercise": {
+      "question": "Which attribute on an <iframe> defines the web address of the embedded document?",
+      "options": [
+        "href",
+        "src",
+        "link",
+        "target"
+      ],
+      "correct": 1,
+      "hint": "Just like an <img> tag, it uses src."
+    }
+  },
+  {
+    "id": "html_filepaths",
+    "category": "HTML Basics",
+    "title": "HTML File Paths",
+    "summary": "A file path describes the location of a file in a website's folder structure.",
+    "eli5": {
+      "story": "If you want to tell a friend where your favorite toy is, you might say 'Look in my closet, top shelf, inside the red box!' A file path gives the browser step-by-step directions through computer folders to find pictures, stylesheets, and sounds.",
+      "analogy": "🗺️ The Treasure Map: A file path guides the browser to the exact folder where the treasure is kept.",
+      "rules": [
+        "picture.jpg means the file is in the exact same folder.",
+        "images/picture.jpg means look inside the images folder.",
+        "../picture.jpg means go UP one folder level first."
+      ]
+    },
+    "body": "### Types of File Paths:\n1. **Absolute File Paths**: A full URL to an internet resource:\n   `<img src=\"https://www.w3schools.com/images/picture.jpg\">`\n2. **Relative File Paths**: Points to a file relative to the current page:\n   - `<img src=\"picture.jpg\">`: File is in the same folder as current page.\n   - `<img src=\"images/picture.jpg\">`: File is in the `images` folder inside current folder.\n   - `<img src=\"/images/picture.jpg\">`: File is in the `images` folder at the root of the domain.\n   - `<img src=\"../picture.jpg\">`: File is in the folder one level up from current folder.",
+    "tryItCode": "<div style=\"background:#0f172a; padding:20px; border-radius:12px; font-family:sans-serif; color:#e2e8f0;\">\n  <h4 style=\"color:#10b981; margin-top:0;\">File Path Simulator:</h4>\n  <ul style=\"line-height:1.8; font-family:monospace; font-size:13px;\">\n    <li><span style=\"color:#38bdf8;\">./index.html</span> - Current directory</li>\n    <li><span style=\"color:#f59e0b;\">./assets/logo.png</span> - Subfolder path</li>\n    <li><span style=\"color:#ec4899;\">../database/schema.sql</span> - One folder up (parent)</li>\n  </ul>\n</div>",
+    "codeType": "html",
+    "exercise": {
+      "question": "What does \"../\" indicate at the start of a relative file path in HTML?",
+      "options": [
+        "Search Google for the file",
+        "Move up one folder level from current location",
+        "Move down into a hidden folder",
+        "Restart the web browser"
+      ],
+      "correct": 1,
+      "hint": "Two dots and a slash (../) navigates up to the parent directory."
+    }
+  },
+  {
+    "id": "html_head",
+    "category": "HTML Head & Metadata",
+    "title": "HTML Head & Metadata",
+    "summary": "The HTML <head> element is a container for metadata (data about data) and is placed between the <html> tag and the <body> tag.",
+    "eli5": {
+      "story": "Before an astronaut launches into space, the mission control computers need to know the flight coordinates, the language to speak, and the screen size of the spacecraft. The <head> tag is the mission control center of your website!",
+      "analogy": "🧠 The Website Brain: <head> holds secret instructions, fonts, and stylesheets that tell the body how to look.",
+      "rules": [
+        "<head> comes before <body> and is never drawn on the visible page.",
+        "<meta charset='utf-8'> lets you write in every language and emoji on Earth.",
+        "<meta name='viewport' ...> makes the page look gorgeous on mobile phones."
+      ]
+    },
+    "body": "### Key Elements Inside `<head>`:\n- `<title>`: Defines the document title shown in browser tab and search results.\n- `<style>`: Used to define internal CSS styling rules for a single document.\n- `<link>`: Links external resources like CSS stylesheets or favicons.\n- `<meta>`: Used to specify character set, page description, keywords, author, and viewport settings.\n- `<script>`: Embeds or links client-side JavaScript.\n- `<base>`: Specifies the base URL/target for all relative URLs in a page.\n\n### The Critical Mobile Viewport Tag:\n```html\n<meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n```\nThis gives the browser instructions on how to control the page's dimensions and scaling on smartphones.",
+    "tryItCode": "<!DOCTYPE html>\n<html>\n<head>\n  <meta charset=\"UTF-8\">\n  <meta name=\"description\" content=\"ByteVerse Cyber Academy\">\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n  <title>Mission Control</title>\n</head>\n<body style=\"font-family:sans-serif; background:#0f172a; color:#fff; padding:20px;\">\n  <h3>Metadata successfully configured!</h3>\n  <p>The viewport and character encoding are active.</p>\n</body>\n</html>",
+    "codeType": "html",
+    "exercise": {
+      "question": "Which meta tag ensures that a web page scales properly across mobile smartphones and tablets?",
+      "options": [
+        "<meta name=\"screen-fix\">",
+        "<meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">",
+        "<meta name=\"mobile-friendly\" content=\"true\">",
+        "<meta name=\"resolution\" content=\"1080p\">"
+      ],
+      "correct": 1,
+      "hint": "It configures the viewport width to match device-width."
+    }
+  },
+  {
+    "id": "html_computercode",
+    "category": "HTML Text Formatting",
+    "title": "HTML Computer Code Elements",
+    "summary": "HTML contains several elements for defining user input and computer code.",
+    "eli5": {
+      "story": "When you read a computer manual, you notice that code snippets look different than regular storybooks. They use a special monospaced font where every letter is the exact same width! HTML has tags like <code> and <kbd> to show code on the screen.",
+      "analogy": "💻 Typewriter Letters: <code> gives words that vintage programmer monospace aesthetic.",
+      "rules": [
+        "<code> marks computer code or variables.",
+        "<kbd> marks keyboard keys to press like Ctrl+C.",
+        "<pre> preserves all spaces, tabs, and line breaks exactly as typed."
+      ]
+    },
+    "body": "### Code Elements:\n- `<code>`: Defines a piece of computer code. (Does not preserve whitespace; pair with `<pre>`).\n- `<kbd>`: Defines keyboard input (e.g. `<kbd>Ctrl</kbd> + <kbd>S</kbd>`).\n- `<samp>`: Defines sample output from a computer program.\n- `<var>`: Defines a variable in programming or in a mathematical expression.\n- `<pre>`: Defines preformatted text, preserving indents and line breaks.",
+    "tryItCode": "<div style=\"background:#0f172a; padding:20px; border-radius:12px; color:#e2e8f0; font-family:sans-serif;\">\n  <p>Press <kbd style=\"background:#1e293b; padding:2px 6px; border-radius:4px; border:1px solid #475569;\">Ctrl</kbd> + <kbd style=\"background:#1e293b; padding:2px 6px; border-radius:4px; border:1px solid #475569;\">C</kbd> to copy.</p>\n  <pre style=\"background:#020617; padding:12px; border-radius:8px; border:1px solid #1e293b; color:#38bdf8; font-family:monospace;\">\nfunction helloWorld() {\n    console.log(\"ByteVerse Online\");\n}\n  </pre>\n</div>",
+    "codeType": "html",
+    "exercise": {
+      "question": "Which HTML element preserves spaces and line breaks exactly as they are written in the source code?",
+      "options": [
+        "<code>",
+        "<pre>",
+        "<samp>",
+        "<var>"
+      ],
+      "correct": 1,
+      "hint": "It stands for pre-formatted text: <pre>."
+    }
+  },
+  {
+    "id": "html_entities",
+    "category": "HTML Text Formatting",
+    "title": "HTML Entities & Symbols",
+    "summary": "Reserved characters in HTML must be replaced with character entities so the browser does not confuse them with tags.",
+    "eli5": {
+      "story": "If you type a less-than sign < on your webpage, the browser thinks 'Oh boy, they are starting a new HTML tag!' To show a real < sign without confusing the computer, you use a special secret code word: &lt; (which stands for Less Than)!",
+      "analogy": "🔑 The Secret Passcode: Entities turn reserved keyboard symbols into harmless text.",
+      "rules": [
+        "&lt; displays a < less than sign.",
+        "&gt; displays a > greater than sign.",
+        "&copy; displays the official copyright © symbol."
+      ]
+    },
+    "body": "### Common HTML Entities:\n| Result | Description | Entity Name | Entity Number |\n| :--- | :--- | :--- | :--- |\n| | non-breaking space | `&nbsp;` | `&#160;` |\n| < | less than | `&lt;` | `&#60;` |\n| > | greater than | `&gt;` | `&#62;` |\n| & | ampersand | `&amp;` | `&#38;` |\n| \" | double quotation mark | `&quot;` | `&#34;` |\n| © | copyright | `&copy;` | `&#169;` |\n| € | euro | `&euro;` | `&#8364;` |\n| ♥ | black heart suit | `&hearts;` | `&#9829;` |",
+    "tryItCode": "<div style=\"background:#0f172a; padding:20px; border-radius:12px; color:#e2e8f0; font-family:sans-serif;\">\n  <h4 style=\"color:#38bdf8; margin-top:0;\">HTML Entities in Action:</h4>\n  <p>To print &lt;div&gt; in HTML, write: <code>&amp;lt;div&amp;gt;</code></p>\n  <p>Price: 99 &euro; &bull; Made with &hearts; by Affan Sayed &copy; 2026</p>\n</div>",
+    "codeType": "html",
+    "exercise": {
+      "question": "Which entity name is used to display the copyright symbol (©) in HTML?",
+      "options": [
+        "&copy;",
+        "&copyright;",
+        "&cr;",
+        "&c;"
+      ],
+      "correct": 0,
+      "hint": "It is written as &copy;."
+    }
+  },
+  {
+    "id": "html_canvas",
+    "category": "HTML5 Graphics & APIs",
+    "title": "HTML5 Canvas Graphics",
+    "summary": "The HTML <canvas> element is used to draw graphics on the fly via JavaScript.",
+    "eli5": {
+      "story": "Imagine a blank canvas on an easel waiting for an artist. The <canvas> tag gives the web browser a blank white rectangle. Then, your JavaScript code acts like an ultra-fast robot paintbrush that paints rectangles, circles, stars, and video game spaceships at 60 frames per second!",
+      "analogy": "🎨 The Digital Sketchpad: Canvas allows live animations, charts, and arcade mini-games.",
+      "rules": [
+        "<canvas id='myCanvas' width='400' height='200'> creates the drawing board.",
+        "JavaScript uses getContext('2d') to grab the paintbrush.",
+        "ctx.fillRect(x, y, w, h) draws colored rectangles."
+      ]
+    },
+    "body": "### Basic Canvas Drawing with JavaScript:\n```html\n<canvas id=\"myCanvas\" width=\"200\" height=\"100\" style=\"border:1px solid #d3d3d3;\"></canvas>\n\n<script>\n  const canvas = document.getElementById(\"myCanvas\");\n  const ctx = canvas.getContext(\"2d\");\n  ctx.fillStyle = \"#00f2fe\";\n  ctx.fillRect(10, 10, 150, 80);\n</script>\n```\n\n### Common Canvas 2D Methods:\n- `ctx.fillRect(x, y, width, height)`: Draws a filled rectangle.\n- `ctx.arc(x, y, radius, startAngle, endAngle)`: Creates a circular arc or full circle.\n- `ctx.beginPath()` / `ctx.stroke()`: Draws custom multi-point lines.\n- `ctx.drawImage(img, x, y)`: Draws sprites and pictures onto the canvas.",
+    "tryItCode": "<div style=\"text-align:center; background:#0f172a; padding:16px; border-radius:12px;\">\n  <canvas id=\"demoCanvas\" width=\"300\" height=\"150\" style=\"background:#020617; border-radius:8px; border:1px solid #334155;\"></canvas>\n  <script>\n    const c = document.getElementById('demoCanvas');\n    if (c) {\n      const ctx = c.getContext('2d');\n      ctx.fillStyle = '#10b981';\n      ctx.fillRect(20, 20, 80, 80);\n      ctx.fillStyle = '#00f2fe';\n      ctx.beginPath();\n      ctx.arc(190, 60, 40, 0, 2 * Math.PI);\n      ctx.fill();\n    }\n  </script>\n  <p style=\"color:#94a3b8; font-size:12px; margin-top:8px;\">Green square and blue circle drawn directly with Canvas 2D API!</p>\n</div>",
+    "codeType": "html",
+    "exercise": {
+      "question": "Which JavaScript method is called on a canvas element to obtain the 2D drawing rendering context?",
+      "options": [
+        "canvas.get2D()",
+        "canvas.getContext('2d')",
+        "canvas.paint()",
+        "canvas.createBrush()"
+      ],
+      "correct": 1,
+      "hint": "It is canvas.getContext('2d')."
+    }
+  },
+  {
+    "id": "html_webstorage",
+    "category": "HTML5 Graphics & APIs",
+    "title": "HTML5 Web Storage (localStorage)",
+    "summary": "With HTML5 Web Storage, web applications can store data locally within the user's browser without expiring.",
+    "eli5": {
+      "story": "When you turn off your video game console, you want your high score and saved games to still be there when you turn it back on tomorrow. Before HTML5, websites had to use tiny cookies. With HTML5 Web Storage, your browser has a personal safe that holds scores and settings forever!",
+      "analogy": "💾 The Browser Memory Card: localStorage remembers your game progress even after you restart your device.",
+      "rules": [
+        "localStorage stores data with no expiration date.",
+        "sessionStorage only stores data until the browser tab is closed.",
+        "localStorage.setItem('key', 'value') saves data, and getItem('key') loads it back."
+      ]
+    },
+    "body": "### LocalStorage vs SessionStorage:\n- `window.localStorage`: Stores data with no expiration date. The data persists even when the browser is closed and reopened.\n- `window.sessionStorage`: Stores data for one session (data is lost when the browser tab is closed).\n\n### Methods:\n```javascript\n// Save Data\nlocalStorage.setItem(\"player_name\", \"Affan\");\n\n// Read Data\nconst name = localStorage.getItem(\"player_name\");\n\n// Remove Specific Item\nlocalStorage.removeItem(\"player_name\");\n\n// Clear All Saved Data\nlocalStorage.clear();\n```",
+    "tryItCode": "<div style=\"background:#0f172a; padding:20px; border-radius:12px; font-family:sans-serif; color:#e2e8f0; text-align:center;\">\n  <h4 style=\"color:#00f2fe; margin-top:0;\">HTML5 Web Storage Tester</h4>\n  <button onclick=\"localStorage.setItem('bv_test', 'Player 1 Ready'); alert('Saved to localStorage: ' + localStorage.getItem('bv_test'));\" style=\"background:#10b981; color:#0f172a; font-weight:bold; padding:8px 16px; border-radius:8px; border:none; cursor:pointer;\">\n    Save &amp; Read from localStorage\n  </button>\n</div>",
+    "codeType": "html",
+    "exercise": {
+      "question": "Which Web Storage object keeps stored data indefinitely even after closing and reopening the browser?",
+      "options": [
+        "sessionStorage",
+        "localStorage",
+        "tempStorage",
+        "cacheStorage"
+      ],
+      "correct": 1,
+      "hint": "It stores data locally forever: localStorage."
+    }
   }
 ];

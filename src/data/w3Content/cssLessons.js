@@ -377,5 +377,121 @@ export const CSS_W3_LESSONS = [
       "correct": 0,
       "hint": "--variable-name"
     }
+  },
+  {
+    "id": "css_backgrounds",
+    "category": "CSS Styling & Effects",
+    "title": "CSS Backgrounds & Gradients",
+    "summary": "CSS background properties are used to define the background effects for elements, including gradients and multi-layer images.",
+    "eli5": {
+      "story": "Imagine wallpapering your room. You can choose a solid dark neon paint, or hang a poster of a futuristic spaceship, or even spray paint a stunning two-tone sunset where pink blends smoothly into purple. That is what CSS backgrounds and gradients do!",
+      "analogy": "🌅 The Sunset Gradient: linear-gradient seamlessly blends colors across any card or button.",
+      "rules": [
+        "background-color sets a flat color.",
+        "background-image: linear-gradient(direction, color1, color2) blends colors.",
+        "background-size: cover makes images fill the whole area without stretching out of proportion."
+      ]
+    },
+    "body": "### Background Properties in CSS:\n- `background-color`: Sets background color.\n- `background-image`: Sets one or more background images or gradients.\n- `background-repeat`: Controls if image repeats (`no-repeat`, `repeat-x`, `repeat-y`).\n- `background-size`: `cover` scales the image to cover the entire container; `contain` scales it to fit completely.\n- `background-position`: Sets the starting position (`center`, `top left`, etc.).\n\n### Linear Gradients:\n```css\n.hero-card {\n  background: linear-gradient(135deg, #00f2fe 0%, #4facfe 100%);\n}\n```",
+    "tryItCode": "<div style=\"background:linear-gradient(135deg, #0f172a 0%, #3b0764 50%, #020617 100%); padding:24px; border-radius:16px; border:1px solid #a855f7; text-align:center; font-family:sans-serif;\">\n  <h3 style=\"color:#f472b6; margin:0;\">Cyber Gradient Card</h3>\n  <p style=\"color:#cbd5e1; font-size:14px; margin-top:8px;\">Rendered with CSS linear-gradient(135deg, ...)</p>\n</div>",
+    "codeType": "html",
+    "exercise": {
+      "question": "Which CSS background-size value scales an image to cover the entire container, clipping edges if necessary?",
+      "options": [
+        "stretch",
+        "contain",
+        "cover",
+        "fill-all"
+      ],
+      "correct": 2,
+      "hint": "It covers the container: cover."
+    }
+  },
+  {
+    "id": "css_text_shadows",
+    "category": "CSS Styling & Effects",
+    "title": "CSS Shadows (Box-Shadow & Text-Shadow)",
+    "summary": "CSS shadow effects allow you to add realistic 3D elevation and neon glows to boxes and typography.",
+    "eli5": {
+      "story": "When you hold your hand over a table with a lamp shining from above, your hand casts a soft dark shadow on the table below. It looks like it is floating in mid-air! In CSS, box-shadow makes cards look like they are floating above the computer screen!",
+      "analogy": "💡 The Floating Shadow: box-shadow gives elements depth (elevation) and neon sci-fi glows.",
+      "rules": [
+        "box-shadow: h-offset v-offset blur spread color;",
+        "text-shadow: h-offset v-offset blur color;",
+        "Multiple shadows can be layered with commas for neon laser glows!"
+      ]
+    },
+    "body": "### CSS Box-Shadow Syntax:\n```css\n.card {\n  /* horizontal vertical blur spread color */\n  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.4);\n}\n```\n\n### Neon Cyber Glow Effect:\n```css\n.neon-text {\n  color: #00f2fe;\n  text-shadow: 0 0 10px #00f2fe, 0 0 20px #00f2fe, 0 0 40px #00f2fe;\n}\n```",
+    "tryItCode": "<div style=\"background:#0f172a; padding:24px; border-radius:16px; text-align:center; font-family:sans-serif;\">\n  <h2 style=\"color:#00f2fe; text-shadow:0 0 10px rgba(0,242,254,0.8), 0 0 20px rgba(0,242,254,0.4); margin:0;\">\n    NEON LASER GLOW\n  </h2>\n  <button style=\"margin-top:16px; background:#10b981; color:#0f172a; font-weight:bold; padding:10px 20px; border-radius:10px; border:none; box-shadow:0 0 20px rgba(16,185,129,0.5); cursor:pointer;\">\n    Glowing Action Button\n  </button>\n</div>",
+    "codeType": "html",
+    "exercise": {
+      "question": "Which CSS property is used to add shadows to text letters?",
+      "options": [
+        "font-shadow",
+        "letter-shadow",
+        "text-shadow",
+        "box-shadow"
+      ],
+      "correct": 2,
+      "hint": "It is text-shadow."
+    }
+  },
+  {
+    "id": "css_transforms",
+    "category": "CSS Advanced",
+    "title": "CSS 2D & 3D Transforms",
+    "summary": "CSS transforms allow you to translate, rotate, scale, and skew elements in both 2D and 3D space.",
+    "eli5": {
+      "story": "Remember spinning a pinwheel or scaling a photo with your fingers on an iPad screen? CSS transforms allow you to spin an element like a coin (rotate), make it grow or shrink (scale), or slide it smoothly across the floor (translate) without moving other elements out of place!",
+      "analogy": "🔄 The Hologram Projector: transform allows smooth rotating, scaling, and 3D flips.",
+      "rules": [
+        "transform: rotate(45deg) spins an element.",
+        "transform: scale(1.2) magnifies an element by 20%.",
+        "transform: translate(x, y) moves an element without affecting document layout flow."
+      ]
+    },
+    "body": "### Key Transform Methods:\n- `translate(x, y)`: Moves an element from its current position.\n- `rotate(angle)`: Rotates an element clockwise by given degrees (`45deg`, `180deg`).\n- `scale(x, y)`: Increases or decreases the size of an element (`scale(1.1)`).\n- `skew(x-angle, y-angle)`: Skews an element along X and Y axes.\n- `matrix(n,n,n,n,n,n)`: Combines all 2D transform methods into one.",
+    "tryItCode": "<div style=\"background:#0f172a; padding:30px; border-radius:16px; text-align:center; font-family:sans-serif;\">\n  <div style=\"display:inline-block; background:linear-gradient(45deg, #00f2fe, #4facfe); color:#0f172a; font-weight:bold; padding:16px 24px; border-radius:12px; transform:rotate(-4deg) scale(1.05); box-shadow:0 10px 20px rgba(0,242,254,0.3);\">\n    🚀 Transformed Box (-4deg rotation)\n  </div>\n</div>",
+    "codeType": "html",
+    "exercise": {
+      "question": "Which transform function is used to spin an element clockwise by 90 degrees?",
+      "options": [
+        "transform: spin(90);",
+        "transform: rotate(90deg);",
+        "transform: turn(90);",
+        "transform: tilt(90deg);"
+      ],
+      "correct": 1,
+      "hint": "It is rotate(...) with 'deg' units."
+    }
+  },
+  {
+    "id": "css_glassmorphism",
+    "category": "CSS Styling & Effects",
+    "title": "CSS Glassmorphism & Backdrop Filters",
+    "summary": "Glassmorphism is a modern UI design trend featuring translucent frosted-glass cards with blur filters and glowing borders.",
+    "eli5": {
+      "story": "Have you ever looked through a frosty window on a cold winter morning? You can see lights and shapes behind the glass, but they are soft and beautifully blurred! In modern web design, backdrop-filter: blur creates that exact futuristic frosted glass effect!",
+      "analogy": "🧊 Frosted Glass: Semi-transparent backgrounds with backdrop blur make any UI look like Apple VisionOS or Cyberpunk 2077.",
+      "rules": [
+        "Set background with semi-transparent RGBA like rgba(255, 255, 255, 0.1).",
+        "Apply backdrop-filter: blur(12px).",
+        "Add a subtle 1px border with rgba(255, 255, 255, 0.2) for the glass bevel edge."
+      ]
+    },
+    "body": "### How to Create Modern Glassmorphism:\n```css\n.glass-card {\n  background: rgba(15, 23, 42, 0.75);\n  backdrop-filter: blur(16px);\n  -webkit-backdrop-filter: blur(16px);\n  border: 1px solid rgba(255, 255, 255, 0.1);\n  border-radius: 16px;\n  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);\n}\n```",
+    "tryItCode": "<div style=\"position:relative; background:url('https://images.unsplash.com/photo-1518770660439-4636190af475?w=600') center/cover; padding:30px; border-radius:16px; font-family:sans-serif;\">\n  <div style=\"background:rgba(15, 23, 42, 0.65); backdrop-filter:blur(12px); -webkit-backdrop-filter:blur(12px); border:1px solid rgba(255,255,255,0.2); padding:20px; border-radius:12px; color:#fff; text-align:center;\">\n    <h3 style=\"margin:0; color:#38bdf8;\">Frosted Cyber Glass</h3>\n    <p style=\"font-size:13px; color:#e2e8f0; margin-top:6px;\">Notice how the circuit background behind is smoothly blurred!</p>\n  </div>\n</div>",
+    "codeType": "html",
+    "exercise": {
+      "question": "Which CSS property is responsible for blurring the visual elements behind a translucent container?",
+      "options": [
+        "filter: blur()",
+        "backdrop-filter: blur()",
+        "background-blur",
+        "glass-blur"
+      ],
+      "correct": 1,
+      "hint": "It applies to the backdrop: backdrop-filter."
+    }
   }
 ];

@@ -376,5 +376,121 @@ export const JS_W3_LESSONS = [
       "correct": 1,
       "hint": "setItem(key, value)"
     }
+  },
+  {
+    "id": "js_strings_methods",
+    "category": "JS Strings & Numbers",
+    "title": "JS String Methods & Template Literals",
+    "summary": "JavaScript strings have built-in methods for searching, slicing, replacing, trimming, and formatting text.",
+    "eli5": {
+      "story": "Imagine you have a long sentence printed on a strip of paper. You have safety scissors to snip words out (slice), a magic eraser to swap words (replace), and an amplifier that shouts it in all capital letters (toUpperCase). String methods are those magical editing tools!",
+      "analogy": "✂️ The Word Editor: Methods let you chop, capitalize, or search through text effortlessly.",
+      "rules": [
+        "str.length counts the number of characters in the string.",
+        "str.includes('cat') checks if 'cat' is inside the text.",
+        "Template literals with backticks `Hello ${name}` let you inject variables cleanly."
+      ]
+    },
+    "body": "### Key String Methods:\n- `str.length`: Returns length of string.\n- `str.slice(start, end)`: Extracts a part of a string and returns it.\n- `str.replace(old, new)`: Replaces a specified value with another value.\n- `str.toUpperCase()` / `toLowerCase()`: Converts case.\n- `str.trim()`: Removes whitespace from both ends of a string.\n- `str.split(\",\")`: Splits a string into an array of substrings.",
+    "tryItCode": "const hero = \"  Affan Sayed, Cyber Architect  \";\nconsole.log(\"Cleaned:\", hero.trim());\nconsole.log(\"Uppercase:\", hero.trim().toUpperCase());\nconsole.log(\"Split into parts:\", hero.trim().split(\", \"));\nconsole.log(`Formatted with Template Literal: Welcome [${hero.trim()}] to ByteVerse!`);",
+    "codeType": "js",
+    "exercise": {
+      "question": "Which string method removes whitespace from both the beginning and the end of a string?",
+      "options": [
+        "str.strip()",
+        "str.trim()",
+        "str.clean()",
+        "str.cut()"
+      ],
+      "correct": 1,
+      "hint": "It is called trim()."
+    }
+  },
+  {
+    "id": "js_array_iteration",
+    "category": "JS Arrays",
+    "title": "JS Array Iteration & Reduce",
+    "summary": "Array iteration methods operate on every array item, enabling functional data processing like map, filter, and reduce.",
+    "eli5": {
+      "story": "Imagine a conveyor belt in a candy factory. Every box of candy passes through. Map doubles the candy in each box. Filter throws away the empty boxes. And Reduce takes all the candy from all the boxes and puts it together into one giant celebration cake!",
+      "analogy": "🏭 The Factory Pipeline: Array methods transform, filter, and calculate totals in a single clean chain.",
+      "rules": [
+        "forEach runs a function on every item.",
+        "reduce((acc, curr) => acc + curr, 0) accumulates items into a single total.",
+        "find(item => item.id === 5) returns the first matching item."
+      ]
+    },
+    "body": "### Array Iteration Methods:\n```javascript\nconst scores = [10, 20, 30, 40];\n\n// Reduce to total sum\nconst total = scores.reduce((sum, score) => sum + score, 0);\n\n// Find first score over 25\nconst topScore = scores.find(s => s > 25);\n\n// Check if any score is 40 (some)\nconst hasPerfect = scores.some(s => s === 40);\n```",
+    "tryItCode": "const questXP = [100, 250, 400, 150];\nconst totalXP = questXP.reduce((total, xp) => total + xp, 0);\nconsole.log(\"Individual Quest XP:\", questXP);\nconsole.log(\"Total Accumulated Player XP:\", totalXP);\nconsole.log(\"Level Milestone Reached:\", totalXP >= 500 ? \"Level 2 Master!\" : \"Keep Questing!\");",
+    "codeType": "js",
+    "exercise": {
+      "question": "Which method reduces an entire array to a single value (such as summing all numbers)?",
+      "options": [
+        "Array.reduce()",
+        "Array.total()",
+        "Array.summarize()",
+        "Array.collapse()"
+      ],
+      "correct": 0,
+      "hint": "It is Array.reduce()."
+    }
+  },
+  {
+    "id": "js_classes",
+    "category": "JS Objects & Classes",
+    "title": "JS ES6 Classes & Inheritance",
+    "summary": "JavaScript classes are templates for creating objects, encapsulating data with methods and supporting class inheritance.",
+    "eli5": {
+      "story": "Think of a blueprint for building superhero robots. The blueprint says every robot has a name, a battery level, and can shoot lasers! Once you have the blueprint (a Class), you can press a button and build 100 different robots with their own unique codenames!",
+      "analogy": "🤖 The Robot Blueprint: A class is the master plan; 'new Hero()' creates an actual living hero in your game.",
+      "rules": [
+        "Use class Hero { constructor(name) { this.name = name; } }.",
+        "Methods inside a class do not need the 'function' keyword.",
+        "Subclasses use 'extends' and call 'super()' to inherit from a parent class."
+      ]
+    },
+    "body": "### Defining a Class:\n```javascript\nclass Player {\n  constructor(name, role) {\n    this.name = name;\n    this.role = role;\n    this.xp = 0;\n  }\n\n  gainXP(amount) {\n    this.xp += amount;\n    return `${this.name} gained ${amount} XP! Total: ${this.xp}`;\n  }\n}\n\nconst player1 = new Player(\"Affan\", \"Architect\");\nconsole.log(player1.gainXP(250));\n```",
+    "tryItCode": "class CyberHero {\n  constructor(name, power) {\n    this.name = name;\n    this.power = power;\n  }\n  activate() {\n    return `🔥 ${this.name} triggers [${this.power}] special ability!`;\n  }\n}\n\nconst hero = new CyberHero(\"Neon Phantom\", \"Ghost Shift\");\nconsole.log(hero.activate());",
+    "codeType": "js",
+    "exercise": {
+      "question": "Which special method is automatically executed when a new object instance is created with 'new'?",
+      "options": [
+        "init()",
+        "constructor()",
+        "create()",
+        "build()"
+      ],
+      "correct": 1,
+      "hint": "It constructs the object: constructor()."
+    }
+  },
+  {
+    "id": "js_closures",
+    "category": "JS Advanced",
+    "title": "JS Closures & Lexical Scope",
+    "summary": "A closure gives a function access to its outer function's scope even after the outer function has finished executing.",
+    "eli5": {
+      "story": "Imagine a child going off to summer camp with a secret backpack packed by their parents. Even though the parents are miles away at home, the child can still reach into the backpack and use everything inside! A closure is an inner function carrying its backpack of outer variables wherever it travels!",
+      "analogy": "🎒 The Secret Backpack: A closure remembers and accesses variables from where it was born.",
+      "rules": [
+        "Functions inside other functions have access to the outer function's variables.",
+        "The variables are preserved in memory even after the outer function finishes.",
+        "Great for private variables and creating game score counters!"
+      ]
+    },
+    "body": "### Understanding Closures:\n```javascript\nfunction createScoreKeeper(initialScore = 0) {\n  let score = initialScore; // private variable\n\n  return {\n    addPoints: function(points) {\n      score += points;\n      return score;\n    },\n    getScore: function() {\n      return score;\n    }\n  };\n}\n\nconst player1Game = createScoreKeeper(100);\nplayer1Game.addPoints(50); // score is 150\n```",
+    "tryItCode": "function createMultiplier(factor) {\n  // The inner function remembers 'factor' via closure!\n  return function(number) {\n    return number * factor;\n  };\n}\n\nconst double = createMultiplier(2);\nconst triple = createMultiplier(3);\n\nconsole.log(\"Double 25:\", double(25));\nconsole.log(\"Triple 25:\", triple(25));",
+    "codeType": "js",
+    "exercise": {
+      "question": "What is a closure in JavaScript?",
+      "options": [
+        "A syntax error when a function is closed improperly",
+        "A function bundled with references to its surrounding lexical state",
+        "A way to permanently lock and delete variables",
+        "A built-in JSON compression tool"
+      ],
+      "correct": 1,
+      "hint": "It bundles a function with its lexical scope."
+    }
   }
 ];

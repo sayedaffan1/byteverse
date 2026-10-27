@@ -312,5 +312,63 @@ export const PHP_W3_LESSONS = [
       "correct": 1,
       "hint": "Two underscores: __construct()"
     }
+  },
+  {
+    "id": "php_superglobals",
+    "category": "PHP Superglobals & Forms",
+    "title": "PHP Superglobals ($_SERVER, $_POST, $_GET)",
+    "summary": "Superglobals are built-in variables that are always available in all scopes throughout a PHP script without needing global declarations.",
+    "eli5": {
+      "story": "Imagine a radio walkie-talkie channel that broadcasts to every room in the entire school at once! Superglobals in PHP are magic variables that are visible everywhere — inside functions, classes, and scripts — carrying incoming messages from web visitors!",
+      "analogy": "📢 The Public Broadcast: Superglobals hold browser information, form submissions, and cookie data automatically.",
+      "rules": [
+        "$_POST collects form submissions securely.",
+        "$_GET collects URL query parameters (like ?id=10).",
+        "$_SERVER holds information about headers, paths, and script locations."
+      ]
+    },
+    "body": "### Common PHP Superglobals:\n- `$GLOBALS`: References all variables available in global scope.\n- `$_SERVER`: Holds server and execution environment information.\n- `$_REQUEST`: Contains `$_GET`, `$_POST`, and `$_COOKIE`.\n- `$_POST`: Collects data after submitting an HTML form with `method=\"post\"`.\n- `$_GET`: Collects data sent in the URL query string.\n- `$_FILES`: Contains uploaded file items.\n- `$_ENV`: Environment variables.\n- `$_COOKIE`: HTTP Cookies.\n- `$_SESSION`: Session variables.",
+    "tryItCode": "<?php\n// Simulating $_SERVER and $_GET in PHP\n$mock_server = [\n    'REQUEST_METHOD' => 'POST',\n    'SERVER_NAME' => 'byteverse.io',\n    'REMOTE_ADDR' => '127.0.0.1'\n];\n\necho \"Request Method: \" . $mock_server['REQUEST_METHOD'] . \"<br>\";\necho \"Server Host: \" . $mock_server['SERVER_NAME'] . \"<br>\";\necho \"Client IP: \" . $mock_server['REMOTE_ADDR'];\n?>",
+    "codeType": "php",
+    "exercise": {
+      "question": "Which PHP superglobal contains parameters passed via the URL query string (e.g. ?page=2)?",
+      "options": [
+        "$_POST",
+        "$_URL",
+        "$_GET",
+        "$_QUERY"
+      ],
+      "correct": 2,
+      "hint": "It is $_GET."
+    }
+  },
+  {
+    "id": "php_password_hash",
+    "category": "PHP Security & Backend",
+    "title": "PHP Secure Password Hashing",
+    "summary": "Never store plain-text passwords in a database! Modern PHP provides password_hash() and password_verify() with industry-standard Bcrypt/Argon2.",
+    "eli5": {
+      "story": "If you bake a chocolate cake with flour, sugar, and cocoa, you can never take the baked cake and turn it back into flour and raw cocoa! A cryptographic hash is that one-way baking oven: you can bake a password into a scrambled string, but no hacker can ever un-bake it back into the secret word!",
+      "analogy": "🔒 The One-Way Blender: password_hash creates a secure cryptographic hash that cannot be reversed.",
+      "rules": [
+        "password_hash($pass, PASSWORD_BCRYPT) creates a secure salted hash.",
+        "password_verify($input, $hash) checks if the login attempt matches.",
+        "Never use outdated md5() or sha1() for passwords!"
+      ]
+    },
+    "body": "### Creating and Verifying Hashes:\n```php\n// 1. When registering a user:\n$password = \"CyberHero2026!\";\n$hashedPassword = password_hash($password, PASSWORD_BCRYPT);\n\n// 2. When logging in:\nif (password_verify($userTypedPassword, $hashedPassword)) {\n    echo \"Login verified!\";\n} else {\n    echo \"Incorrect password!\";\n}\n```",
+    "tryItCode": "<?php\n// Password hashing demonstration\n$secret = \"SuperAffanSecurePass\";\n$hash = password_hash($secret, PASSWORD_BCRYPT);\n\necho \"Original Password: \" . $secret . \"<br>\";\necho \"Bcrypt Hash (60 chars): \" . substr($hash, 0, 30) . \"...<br>\";\necho \"Match Check: \" . (password_verify($secret, $hash) ? \"✅ Valid Match!\" : \"❌ Invalid\");\n?>",
+    "codeType": "php",
+    "exercise": {
+      "question": "Which PHP function is recommended to securely hash passwords?",
+      "options": [
+        "md5()",
+        "sha1()",
+        "password_hash()",
+        "encrypt()"
+      ],
+      "correct": 2,
+      "hint": "It is password_hash()."
+    }
   }
 ];
