@@ -96,3 +96,35 @@ code, pre, .font-mono {
 .pulse-border {
   animation: pulseBorder 3s infinite;
 }
+
+/* Print Stylesheet for Certificate of Mastery */
+@media print {
+  nav, footer, button, .no-print, aside {
+    display: none !important;
+  }
+  body, html {
+    background: #ffffff !important;
+    color: #0f172a !important;
+    padding: 0 !important;
+    margin: 0 !important;
+  }
+  #byteverse-certificate {
+    background: #ffffff !important;
+    border: 3px solid #0f172a !important;
+    box-shadow: none !important;
+    color: #0f172a !important;
+    page-break-inside: avoid;
+    margin: 1cm auto !important;
+    max-width: 100% !important;
+  }
+  #byteverse-certificate * {
+    color: #0f172a !important;
+    text-shadow: none !important;
+  }
+  #byteverse-certificate h2 {
+    color: #0f172a !important;
+    background: none !important;
+    -webkit-text-fill-color: #0f172a !important;
+  }
+}
+

@@ -156,50 +156,51 @@ export const BossRaid = () => {
       
       {/* HERO CLASS SELECTOR */}
       {gameState === 'select_hero' && (
-        <div className="rounded-3xl glass-panel p-6 sm:p-10 border border-rose-500/30 bg-gradient-to-br from-slate-900 via-slate-900/90 to-rose-950/30 text-center space-y-6 shadow-2xl">
-          <div className="w-20 h-20 mx-auto rounded-3xl bg-gradient-to-tr from-rose-500 to-red-600 p-0.5 shadow-xl shadow-rose-500/20 flex items-center justify-center">
-            <div className="w-full h-full bg-slate-950 rounded-[22px] flex items-center justify-center text-rose-500">
-              <Skull size={40} className="animate-pulse" />
+        <div className="rounded-2xl sm:rounded-3xl glass-panel p-5 sm:p-10 border border-rose-500/30 bg-gradient-to-br from-slate-900 via-slate-900/90 to-rose-950/30 text-center space-y-4 sm:space-y-6 shadow-2xl">
+          <div className="w-16 h-16 sm:w-20 sm:h-20 mx-auto rounded-2xl sm:rounded-3xl bg-gradient-to-tr from-rose-500 to-red-600 p-0.5 shadow-xl shadow-rose-500/20 flex items-center justify-center">
+            <div className="w-full h-full bg-slate-950 rounded-[18px] sm:rounded-[22px] flex items-center justify-center text-rose-500">
+              <Skull size={32} className="animate-pulse sm:hidden" />
+              <Skull size={40} className="animate-pulse hidden sm:block" />
             </div>
           </div>
 
           <div>
-            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-rose-500/10 border border-rose-500/30 text-rose-400 text-xs font-mono font-bold mb-3">
-              <Swords size={13} />
+            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-rose-500/10 border border-rose-500/30 text-rose-400 text-[11px] sm:text-xs font-mono font-bold mb-2 sm:mb-3">
+              <Swords size={12} />
               <span>EPIC CYBER RAID BOSS</span>
             </div>
-            <h2 className="text-2xl sm:text-3xl lg:text-4xl font-black text-white">
+            <h2 className="text-xl sm:text-3xl lg:text-4xl font-black text-white">
               The Syntax Devourer
             </h2>
-            <p className="text-xs sm:text-sm text-slate-300 mt-2 max-w-md mx-auto leading-relaxed">
+            <p className="text-xs sm:text-sm text-slate-300 mt-1.5 sm:mt-2 max-w-md mx-auto leading-relaxed">
               A monstrous entity born from unclosed `&lt;div&gt;` tags, missing semicolons, and infinite loops! Choose your class to slay it!
             </p>
           </div>
 
           {/* Hero Selection Cards */}
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-3.5 text-left pt-2">
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5 sm:gap-3.5 text-left pt-1">
             {HERO_CLASSES.map((hero) => (
               <div
                 key={hero.id}
                 onClick={() => setSelectedHero(hero)}
-                className={`p-4 sm:p-5 rounded-2xl border cursor-pointer transition-all duration-200 flex flex-col justify-between ${
+                className={`p-3.5 sm:p-5 rounded-xl sm:rounded-2xl border cursor-pointer transition-all duration-200 flex flex-col justify-between active:scale-[0.99] touch-manipulation ${
                   selectedHero.id === hero.id
-                    ? 'bg-slate-900 border-rose-400 shadow-[0_0_20px_rgba(244,63,94,0.3)] ring-1 ring-rose-400/50 scale-[1.02]'
+                    ? 'bg-slate-900 border-rose-400 shadow-[0_0_20px_rgba(244,63,94,0.3)] ring-1 ring-rose-400/50 scale-[1.01]'
                     : 'bg-slate-950/70 border-slate-800 hover:border-slate-700 hover:bg-slate-900/60'
                 }`}
               >
                 <div>
-                  <div className="text-3xl mb-2">{hero.icon}</div>
+                  <div className="text-2xl sm:text-3xl mb-1.5">{hero.icon}</div>
                   <h4 className="font-bold text-white text-sm sm:text-base">{hero.name}</h4>
-                  <div className="text-[11px] text-rose-400 font-mono mt-0.5 font-bold">
+                  <div className="text-[10px] sm:text-[11px] text-rose-400 font-mono mt-0.5 font-bold">
                     Special: {hero.spell}
                   </div>
-                  <p className="text-xs text-slate-400 mt-2 leading-relaxed">
+                  <p className="text-[11px] sm:text-xs text-slate-400 mt-1.5 leading-relaxed">
                     {hero.desc}
                   </p>
                 </div>
 
-                <div className="mt-4 pt-2 border-t border-slate-800/80 flex items-center justify-between text-xs font-mono text-slate-400">
+                <div className="mt-3 pt-2 border-t border-slate-800/80 flex items-center justify-between text-[11px] sm:text-xs font-mono text-slate-400">
                   <span>Base Shields:</span>
                   <span className="text-rose-400 font-bold">
                     {Array.from({ length: hero.hearts }).map((_, i) => '❤️').join('')}
@@ -211,9 +212,9 @@ export const BossRaid = () => {
 
           <button
             onClick={() => startBattle(selectedHero)}
-            className="w-full py-4 rounded-2xl bg-gradient-to-r from-rose-500 via-red-500 to-pink-600 hover:from-rose-400 hover:to-pink-500 text-slate-950 font-black text-sm sm:text-base flex items-center justify-center gap-2 shadow-xl shadow-rose-500/25 active:scale-95 transition-all"
+            className="w-full py-3.5 sm:py-4 rounded-xl sm:rounded-2xl bg-gradient-to-r from-rose-500 via-red-500 to-pink-600 hover:from-rose-400 hover:to-pink-500 text-slate-950 font-black text-xs sm:text-base flex items-center justify-center gap-2 shadow-xl shadow-rose-500/25 active:scale-95 touch-manipulation min-h-[46px] transition-all"
           >
-            <Swords size={18} />
+            <Swords size={16} />
             <span>ENTER BOSS ARENA AS {selectedHero.name.toUpperCase()}</span>
           </button>
         </div>
@@ -230,33 +231,33 @@ export const BossRaid = () => {
             
             {/* Floating Damage Popup */}
             {damageNumber && (
-              <div className="absolute top-8 right-12 text-3xl sm:text-4xl font-black text-amber-400 animate-bounce font-mono drop-shadow-[0_0_15px_rgba(251,191,36,0.8)] z-20">
+              <div className="absolute top-3 right-4 sm:top-8 sm:right-12 text-2xl sm:text-4xl font-black text-amber-400 animate-bounce font-mono drop-shadow-[0_0_15px_rgba(251,191,36,0.8)] z-20">
                 {damageNumber}
               </div>
             )}
 
-            <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
+            <div className="flex items-center justify-between gap-2.5 sm:gap-4 flex-wrap">
               
               {/* Boss Avatar & Name */}
-              <div className="flex items-center gap-3.5 text-center sm:text-left">
-                <div className="w-16 h-16 rounded-2xl bg-rose-500/20 border border-rose-500/40 flex items-center justify-center text-3xl shadow-lg relative">
+              <div className="flex items-center gap-2.5 sm:gap-3.5">
+                <div className="w-12 h-12 sm:w-16 sm:h-16 rounded-xl sm:rounded-2xl bg-rose-500/20 border border-rose-500/40 flex items-center justify-center text-2xl sm:text-3xl shadow-lg relative shrink-0">
                   <span className={isBossHurt ? 'animate-spin text-amber-400' : 'animate-pulse'}>👾</span>
                 </div>
                 <div>
-                  <div className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-rose-500/20 text-rose-300 text-[10px] font-mono font-bold mb-1">
+                  <div className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-rose-500/20 text-rose-300 text-[9px] sm:text-[10px] font-mono font-bold mb-0.5">
                     <Skull size={10} />
-                    <span>SYNTAX DEVOURER (LVL 99)</span>
+                    <span>SYNTAX DEVOURER</span>
                   </div>
-                  <h3 className="text-xl sm:text-2xl font-black text-white">
+                  <h3 className="text-base sm:text-2xl font-black text-white leading-tight">
                     The Syntax Devourer
                   </h3>
                 </div>
               </div>
 
               {/* Player Hearts */}
-              <div className="bg-slate-950/80 px-4 py-2.5 rounded-2xl border border-slate-800 flex items-center gap-2">
-                <span className="text-xs font-mono text-slate-400 mr-1">Player Shield:</span>
-                <div className="flex items-center gap-1 text-lg">
+              <div className="bg-slate-950/80 px-3 py-1.5 sm:px-4 sm:py-2 rounded-xl sm:rounded-2xl border border-slate-800 flex items-center gap-1.5 ml-auto">
+                <span className="text-[10px] sm:text-xs font-mono text-slate-400 mr-0.5">Shield:</span>
+                <div className="flex items-center gap-0.5 text-base sm:text-lg">
                   {Array.from({ length: maxHearts }).map((_, i) => (
                     <span key={i} className={i < playerHearts ? 'text-rose-500' : 'text-slate-700 opacity-40'}>
                       ❤️
@@ -267,8 +268,8 @@ export const BossRaid = () => {
             </div>
 
             {/* Boss HP Bar */}
-            <div className="mt-4 space-y-1.5">
-              <div className="flex items-center justify-between text-xs font-mono">
+            <div className="mt-3 sm:mt-4 space-y-1 sm:space-y-1.5">
+              <div className="flex items-center justify-between text-[11px] sm:text-xs font-mono">
                 <span className="text-rose-400 font-bold flex items-center gap-1">
                   <Flame size={12} className="fill-current" />
                   Boss Health
@@ -277,7 +278,7 @@ export const BossRaid = () => {
                   {bossHp} / {maxBossHp} HP ({bossHpPercent}%)
                 </span>
               </div>
-              <div className="w-full bg-slate-950 h-3 rounded-full overflow-hidden border border-slate-800">
+              <div className="w-full bg-slate-950 h-2 sm:h-3 rounded-full overflow-hidden border border-slate-800">
                 <div 
                   className="h-full bg-gradient-to-r from-red-600 via-rose-500 to-amber-400 transition-all duration-300"
                   style={{ width: `${bossHpPercent}%` }}
@@ -287,23 +288,23 @@ export const BossRaid = () => {
           </div>
 
           {/* Spell Casting Card */}
-          <div className="glass-panel p-6 sm:p-8 rounded-3xl border border-cyan-500/30 bg-slate-900/90 shadow-2xl space-y-5">
+          <div className="glass-panel p-4 sm:p-8 rounded-2xl sm:rounded-3xl border border-cyan-500/30 bg-slate-900/90 shadow-2xl space-y-3.5 sm:space-y-5">
             <div className="flex items-center justify-between">
-              <span className="px-3 py-1 rounded-full text-xs font-mono font-bold bg-cyan-500/20 text-cyan-300 border border-cyan-500/30 flex items-center gap-1.5">
-                <Zap size={13} />
-                <span>Spell Element: {currentQ.tech}</span>
+              <span className="px-2.5 py-0.5 sm:px-3 sm:py-1 rounded-full text-[11px] sm:text-xs font-mono font-bold bg-cyan-500/20 text-cyan-300 border border-cyan-500/30 flex items-center gap-1.5">
+                <Zap size={12} />
+                <span>Element: {currentQ.tech}</span>
               </span>
-              <span className="text-xs font-mono text-slate-400">
+              <span className="text-[11px] sm:text-xs font-mono text-slate-400">
                 Turn #{currentQIndex + 1}
               </span>
             </div>
 
-            <h3 className="text-base sm:text-lg font-bold text-white leading-relaxed">
+            <h3 className="text-sm sm:text-lg font-bold text-white leading-snug sm:leading-relaxed">
               {currentQ.question}
             </h3>
 
             {/* Spell Options */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-2">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 sm:gap-3 pt-1">
               {currentQ.options.map((opt, idx) => {
                 let btnStyle = 'bg-slate-950/80 hover:bg-slate-800 border-slate-800 text-slate-200 hover:border-cyan-400';
 
@@ -320,7 +321,7 @@ export const BossRaid = () => {
                     key={idx}
                     disabled={feedback !== null}
                     onClick={() => handleCastSpell(idx)}
-                    className={`p-4 rounded-2xl border text-left font-mono text-xs sm:text-sm transition-all duration-150 flex items-center justify-between active:scale-95 ${btnStyle}`}
+                    className={`p-3 sm:p-4 rounded-xl sm:rounded-2xl border text-left font-mono text-xs sm:text-sm transition-all duration-150 flex items-center justify-between active:scale-[0.98] touch-manipulation min-h-[46px] ${btnStyle}`}
                   >
                     <span>{opt}</span>
                     {feedback !== null && idx === currentQ.correct && (
@@ -350,43 +351,44 @@ export const BossRaid = () => {
 
       {/* VICTORY SCREEN */}
       {gameState === 'victory' && (
-        <div className="rounded-3xl glass-panel p-6 sm:p-10 border border-emerald-500/40 bg-gradient-to-br from-slate-900 via-slate-900/95 to-emerald-950/30 text-center space-y-6 shadow-2xl animate-fadeIn">
-          <div className="w-20 h-20 mx-auto rounded-3xl bg-gradient-to-tr from-emerald-500 to-teal-400 p-0.5 shadow-xl shadow-emerald-500/25 flex items-center justify-center">
-            <div className="w-full h-full bg-slate-950 rounded-[22px] flex items-center justify-center text-emerald-400">
-              <Trophy size={40} className="fill-current" />
+        <div className="rounded-2xl sm:rounded-3xl glass-panel p-5 sm:p-10 border border-emerald-500/40 bg-gradient-to-br from-slate-900 via-slate-900/95 to-emerald-950/30 text-center space-y-4 sm:space-y-6 shadow-2xl animate-fadeIn">
+          <div className="w-16 h-16 sm:w-20 sm:h-20 mx-auto rounded-2xl sm:rounded-3xl bg-gradient-to-tr from-emerald-500 to-teal-400 p-0.5 shadow-xl shadow-emerald-500/25 flex items-center justify-center">
+            <div className="w-full h-full bg-slate-950 rounded-[18px] sm:rounded-[22px] flex items-center justify-center text-emerald-400">
+              <Trophy size={32} className="fill-current sm:hidden" />
+              <Trophy size={40} className="fill-current hidden sm:block" />
             </div>
           </div>
 
           <div>
-            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 text-xs font-mono font-bold mb-2">
-              <Award size={13} />
+            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 text-[11px] sm:text-xs font-mono font-bold mb-1.5 sm:mb-2">
+              <Award size={12} />
               <span>FLAWLESS VICTORY</span>
             </div>
-            <h2 className="text-3xl sm:text-4xl font-black text-white">
-              The Syntax Devourer SWAIN!
+            <h2 className="text-2xl sm:text-4xl font-black text-white">
+              The Syntax Devourer SLAIN!
             </h2>
-            <p className="text-xs sm:text-sm text-slate-300 mt-2 max-w-md mx-auto">
+            <p className="text-xs sm:text-sm text-slate-300 mt-1 sm:mt-2 max-w-md mx-auto">
               You banished the corrupted heap memory entity with flawless code execution!
             </p>
           </div>
 
-          <div className="p-4 rounded-2xl bg-slate-950/80 border border-slate-800 max-w-md mx-auto space-y-1">
-            <div className="text-emerald-400 font-bold font-mono text-sm">🏆 Rewards Unlocked:</div>
-            <div className="text-xs text-slate-300 font-mono">+300 Profile XP awarded!</div>
-            <div className="text-xs text-slate-300 font-mono">Achievement: "Syntax Slayer" Badge</div>
+          <div className="p-3.5 sm:p-4 rounded-xl sm:rounded-2xl bg-slate-950/80 border border-slate-800 max-w-md mx-auto space-y-1">
+            <div className="text-emerald-400 font-bold font-mono text-xs sm:text-sm">🏆 Rewards Unlocked:</div>
+            <div className="text-[11px] sm:text-xs text-slate-300 font-mono">+300 Profile XP awarded!</div>
+            <div className="text-[11px] sm:text-xs text-slate-300 font-mono">Achievement: "Syntax Slayer" Badge</div>
           </div>
 
-          <div className="flex flex-col sm:flex-row gap-3 pt-2 max-w-md mx-auto">
+          <div className="flex flex-col sm:flex-row gap-2.5 sm:gap-3 pt-1 max-w-md mx-auto">
             <button
               onClick={() => startBattle(selectedHero)}
-              className="flex-1 py-3.5 rounded-2xl bg-gradient-to-r from-emerald-400 to-teal-500 hover:from-emerald-300 hover:to-teal-400 text-slate-950 font-black text-xs sm:text-sm flex items-center justify-center gap-2 shadow-lg active:scale-95 transition-all"
+              className="flex-1 py-3 sm:py-3.5 rounded-xl sm:rounded-2xl bg-gradient-to-r from-emerald-400 to-teal-500 hover:from-emerald-300 hover:to-teal-400 text-slate-950 font-black text-xs sm:text-sm flex items-center justify-center gap-2 shadow-lg active:scale-95 touch-manipulation min-h-[46px] transition-all"
             >
-              <RotateCcw size={15} />
+              <RotateCcw size={14} />
               <span>RAID AGAIN</span>
             </button>
             <button
               onClick={() => setGameState('select_hero')}
-              className="py-3.5 px-6 rounded-2xl bg-slate-800 hover:bg-slate-700 text-white font-bold text-xs sm:text-sm transition-colors"
+              className="py-3 sm:py-3.5 px-6 rounded-xl sm:rounded-2xl bg-slate-800 hover:bg-slate-700 text-white font-bold text-xs sm:text-sm transition-colors touch-manipulation min-h-[46px]"
             >
               Change Hero
             </button>
@@ -396,35 +398,35 @@ export const BossRaid = () => {
 
       {/* DEFEAT SCREEN */}
       {gameState === 'defeat' && (
-        <div className="rounded-3xl glass-panel p-6 sm:p-10 border border-rose-500/30 bg-gradient-to-br from-slate-900 via-slate-900/95 to-rose-950/40 text-center space-y-6 shadow-2xl animate-fadeIn">
-          <div className="w-20 h-20 mx-auto rounded-3xl bg-slate-950 border border-rose-500/40 flex items-center justify-center text-rose-500 text-3xl">
+        <div className="rounded-2xl sm:rounded-3xl glass-panel p-5 sm:p-10 border border-rose-500/30 bg-gradient-to-br from-slate-900 via-slate-900/95 to-rose-950/40 text-center space-y-4 sm:space-y-6 shadow-2xl animate-fadeIn">
+          <div className="w-16 h-16 sm:w-20 sm:h-20 mx-auto rounded-2xl sm:rounded-3xl bg-slate-950 border border-rose-500/40 flex items-center justify-center text-rose-500 text-2xl sm:text-3xl">
             💀
           </div>
 
           <div>
-            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-rose-500/20 text-rose-300 border border-rose-500/30 text-xs font-mono font-bold mb-2">
-              <Skull size={13} />
+            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-rose-500/20 text-rose-300 border border-rose-500/30 text-[11px] sm:text-xs font-mono font-bold mb-1.5 sm:mb-2">
+              <Skull size={12} />
               <span>SHIELD DEPLETED</span>
             </div>
-            <h2 className="text-3xl font-black text-white">
+            <h2 className="text-2xl sm:text-3xl font-black text-white">
               The Syntax Devourer Overwhelmed You!
             </h2>
-            <p className="text-xs sm:text-sm text-slate-300 mt-2 max-w-md mx-auto">
+            <p className="text-xs sm:text-sm text-slate-300 mt-1 sm:mt-2 max-w-md mx-auto">
               Your shield was broken by unhandled syntax exceptions. Study the docs and try again!
             </p>
           </div>
 
-          <div className="flex flex-col sm:flex-row gap-3 pt-2 max-w-md mx-auto">
+          <div className="flex flex-col sm:flex-row gap-2.5 sm:gap-3 pt-1 max-w-md mx-auto">
             <button
               onClick={() => startBattle(selectedHero)}
-              className="flex-1 py-3.5 rounded-2xl bg-gradient-to-r from-rose-500 to-pink-600 hover:from-rose-400 hover:to-pink-500 text-slate-950 font-black text-xs sm:text-sm flex items-center justify-center gap-2 shadow-lg active:scale-95 transition-all"
+              className="flex-1 py-3 sm:py-3.5 rounded-xl sm:rounded-2xl bg-gradient-to-r from-rose-500 to-pink-600 hover:from-rose-400 hover:to-pink-500 text-slate-950 font-black text-xs sm:text-sm flex items-center justify-center gap-2 shadow-lg active:scale-95 touch-manipulation min-h-[46px] transition-all"
             >
-              <RotateCcw size={15} />
+              <RotateCcw size={14} />
               <span>REVIVE &amp; RETRY</span>
             </button>
             <button
               onClick={() => setGameState('select_hero')}
-              className="py-3.5 px-6 rounded-2xl bg-slate-800 hover:bg-slate-700 text-white font-bold text-xs sm:text-sm transition-colors"
+              className="py-3 sm:py-3.5 px-6 rounded-xl sm:rounded-2xl bg-slate-800 hover:bg-slate-700 text-white font-bold text-xs sm:text-sm transition-colors touch-manipulation min-h-[46px]"
             >
               Switch Hero
             </button>

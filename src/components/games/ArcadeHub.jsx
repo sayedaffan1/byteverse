@@ -107,35 +107,35 @@ export const ArcadeHub = () => {
       </div>
 
       {/* Arcade HUD & Stats Bar */}
-      <div className="p-3 sm:p-4 rounded-2xl bg-slate-900/90 border border-slate-800 shadow-lg flex items-center justify-between flex-wrap gap-3">
-        <div className="flex items-center gap-3 sm:gap-6 flex-wrap">
+      <div className="p-3 sm:p-4 rounded-2xl bg-slate-900/90 border border-slate-800 shadow-lg flex items-center justify-between flex-wrap gap-2.5">
+        <div className="flex items-center gap-2.5 sm:gap-6 flex-wrap">
           {/* Level & Rank */}
           <div className="flex items-center gap-2">
-            <div className="w-8 h-8 rounded-xl bg-gradient-to-tr from-cyan-500 to-purple-500 p-0.5 shadow-md">
+            <div className="w-8 h-8 rounded-xl bg-gradient-to-tr from-cyan-500 to-purple-500 p-0.5 shadow-md shrink-0">
               <div className="w-full h-full bg-slate-950 rounded-[10px] flex items-center justify-center font-bold text-xs text-cyan-300 font-mono">
                 L{playerLevel}
               </div>
             </div>
             <div>
-              <div className="text-[10px] font-mono uppercase text-slate-400">Player Rank</div>
+              <div className="text-[9px] sm:text-[10px] font-mono uppercase text-slate-400">Rank</div>
               <div className="text-xs sm:text-sm font-black text-white">{rankTitle}</div>
             </div>
           </div>
 
           {/* Total XP */}
-          <div className="hidden xs:block border-l border-slate-800 pl-3 sm:pl-6">
-            <div className="text-[10px] font-mono uppercase text-slate-400">Total XP</div>
+          <div className="border-l border-slate-800 pl-2.5 sm:pl-5">
+            <div className="text-[9px] sm:text-[10px] font-mono uppercase text-slate-400">Total XP</div>
             <div className="text-xs sm:text-sm font-black text-amber-400 font-mono">
               {xp.toLocaleString()} XP
             </div>
           </div>
 
           {/* Daily Streak */}
-          <div className="hidden sm:block border-l border-slate-800 pl-6">
-            <div className="text-[10px] font-mono uppercase text-slate-400">Daily Streak</div>
+          <div className="border-l border-slate-800 pl-2.5 sm:pl-5">
+            <div className="text-[9px] sm:text-[10px] font-mono uppercase text-slate-400">Streak</div>
             <div className="text-xs sm:text-sm font-black text-rose-400 font-mono flex items-center gap-1">
-              <Flame size={13} className="fill-current animate-pulse" />
-              <span>{streak} Days</span>
+              <Flame size={12} className="fill-current animate-pulse text-rose-400" />
+              <span>{streak}d</span>
             </div>
           </div>
         </div>
@@ -147,15 +147,15 @@ export const ArcadeHub = () => {
               sound.playClick();
               setIsAchievementsOpen(true);
             }}
-            className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-semibold border border-slate-700 transition-colors"
+            className="flex items-center gap-1 px-2.5 py-1.5 sm:px-3 sm:py-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-semibold border border-slate-700 transition-colors active:scale-95 touch-manipulation"
           >
             <Trophy size={13} className="text-amber-400" />
-            <span className="hidden sm:inline">Badges</span>
+            <span className="text-[11px] sm:text-xs">Badges</span>
           </button>
 
           <button
             onClick={toggleSound}
-            className={`p-2 rounded-xl border transition-colors ${
+            className={`p-2 rounded-xl border transition-colors active:scale-95 touch-manipulation ${
               soundMuted 
                 ? 'bg-rose-500/10 border-rose-500/30 text-rose-400' 
                 : 'bg-cyan-500/10 border-cyan-500/30 text-cyan-400'
@@ -170,10 +170,10 @@ export const ArcadeHub = () => {
       {/* Main Arcade Mode Switcher Tabs */}
       <div className="flex items-center gap-2 overflow-x-auto touch-scroll pb-1 border-b border-slate-800">
         {[
-          { id: 'quests', label: 'Tech Quests (7 Tracks)', icon: Gamepad2, color: 'from-cyan-500 to-blue-500' },
-          { id: 'sprint', label: '60s Code Sprint', icon: Zap, color: 'from-amber-500 to-orange-500' },
-          { id: 'boss', label: 'Syntax Devourer (Raid Boss)', icon: Skull, color: 'from-rose-500 to-red-600' },
-          { id: 'retro', label: 'Retro Mini-Games', icon: Sparkles, color: 'from-purple-500 to-pink-500' }
+          { id: 'quests', label: 'Tech Quests', fullLabel: 'Tech Quests (7 Tracks)', icon: Gamepad2, color: 'from-cyan-500 to-blue-500' },
+          { id: 'sprint', label: '60s Sprint', fullLabel: '60s Code Sprint', icon: Zap, color: 'from-amber-500 to-orange-500' },
+          { id: 'boss', label: 'Boss Raid', fullLabel: 'Syntax Devourer (Boss)', icon: Skull, color: 'from-rose-500 to-red-600' },
+          { id: 'retro', label: 'Retro Games', fullLabel: 'Retro Mini-Games', icon: Sparkles, color: 'from-purple-500 to-pink-500' }
         ].map((tab) => {
           const Icon = tab.icon;
           const isActive = arcadeMode === tab.id;
@@ -181,14 +181,15 @@ export const ArcadeHub = () => {
             <button
               key={tab.id}
               onClick={() => handleModeSwitch(tab.id)}
-              className={`flex items-center gap-2 px-4 py-2 rounded-2xl text-xs sm:text-sm font-bold transition-all whitespace-nowrap active:scale-95 ${
+              className={`flex items-center gap-1.5 sm:gap-2 px-3 py-2 sm:px-4 sm:py-2.5 rounded-2xl text-xs sm:text-sm font-bold transition-all whitespace-nowrap active:scale-95 touch-manipulation shrink-0 ${
                 isActive
                   ? `bg-gradient-to-r ${tab.color} text-slate-950 font-black shadow-lg scale-[1.02]`
                   : 'bg-slate-900 border border-slate-800 text-slate-300 hover:border-slate-700 hover:text-white'
               }`}
             >
-              <Icon size={15} className={isActive ? 'text-slate-950 fill-current' : ''} />
-              <span>{tab.label}</span>
+              <Icon size={14} className={isActive ? 'text-slate-950 fill-current' : ''} />
+              <span className="sm:hidden">{tab.label}</span>
+              <span className="hidden sm:inline">{tab.fullLabel}</span>
             </button>
           );
         })}

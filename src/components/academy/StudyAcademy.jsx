@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { W3_KNOWLEDGE_BASE } from '../../data/w3Content/index';
+import { W3_KNOWLEDGE_BASE } from '../../data/w3Content/index.js';
 import { LANGUAGES } from '../../data/languages';
+import { SYNTAX_CHEAT_SHEETS } from '../../data/syntaxCheatSheets';
+import { ExamCenter } from './ExamCenter';
 import { useGame } from '../../context/GameContext';
 import { sound } from '../../utils/soundEngine';
 import { 
@@ -24,11 +26,20 @@ import {
   Award,
   Volume2,
   VolumeX,
-  Sparkles
+  Sparkles,
+  RotateCcw,
+  GraduationCap,
+  Layers,
+  Terminal,
+  Bookmark
 } from 'lucide-react';
 
 export const StudyAcademy = () => {
   const { addXP } = useGame();
+  
+  // Navigation Tabs: 'tutorials' | 'exams' | 'cheatsheet'
+  const [activeTab, setActiveTab] = useState('tutorials');
+
   const [selectedLang, setSelectedLang] = useState('html');
   const [activeLessonId, setActiveLessonId] = useState('html_home');
   const [sidebarOpen, setSidebarOpen] = useState(false);
@@ -43,7 +54,28 @@ export const StudyAcademy = () => {
   // Exercise state
   const [exerciseChoice, setExerciseChoice] = useState(null);
   const [exerciseFeedback, setExerciseFeedback] = useState(null);
-  const [completedExercises, setCompletedExercises] = useState([]);
+  const [completedExercises, setCompletedExercises] = useState(() => {
+    try {
+      const saved = localStorage.getItem('byteverse_completed_exercises');
+      return saved ? JSON.parse(saved) : [];
+    } catch {
+      return [];
+    }
+  });
+
+  // Cheat Sheet state
+  const [cheatSearch, setCheatSearch] = useState('');
+  const [cheatCategory, setCheatCategory] = useState('all');
+  const [copiedSyntax, setCopiedSyntax] = useState(null);
+
+  // Save completed exercises
+  useEffect(() => {
+    try {
+      localStorage.setItem('byteverse_completed_exercises', JSON.stringify(completedExercises));
+    } catch {
+      // Ignore
+    }
+  }, [completedExercises]);
 
   const currentLessons = W3_KNOWLEDGE_BASE[selectedLang] || W3_KNOWLEDGE_BASE.html;
   
@@ -73,7 +105,7 @@ export const StudyAcademy = () => {
         window.speechSynthesis.cancel();
       }
     };
-  }, [lesson?.id]);
+  }, [lesson?.id, activeTab]);
 
   const handleToggleSpeech = (text) => {
     if (typeof window === 'undefined' || !('speechSynthesis' in window)) {
@@ -86,7 +118,7 @@ export const StudyAcademy = () => {
     } else {
       window.speechSynthesis.cancel();
       const utterance = new SpeechSynthesisUtterance(text);
-      utterance.rate = 0.92; // Clear, calm pacing ideal for young kids and beginners
+      utterance.rate = 0.92; // Clear, calm pacing ideal for young learners & beginners
       utterance.pitch = 1.05;
       utterance.onend = () => setIsSpeaking(false);
       utterance.onerror = () => setIsSpeaking(false);
@@ -103,6 +135,8 @@ export const StudyAcademy = () => {
       setActiveLessonId(newLessons[0].id);
     }
     setSidebarSearch('');
+    setCheatSearch('');
+    setCheatCategory('all');
     setTryItOutput(null);
   };
 
@@ -160,9 +194,15 @@ export const StudyAcademy = () => {
       // Python & PHP simulation
       setTryItOutput({
         type: 'text',
-        content: `[${type.toUpperCase()} Runtime]:\nExecution successful.\nOutput generated with exit code 0.`
+        content: `[${type.toUpperCase()} Runtime Simulation]:\nExecution successful.\nProcess finished with exit code 0.`
       });
     }
+  };
+
+  const handleResetCode = () => {
+    sound.playClick();
+    setEditableCode(lesson.tryItCode);
+    setTryItOutput(null);
   };
 
   const handleCopy = () => {
@@ -190,31 +230,50 @@ export const StudyAcademy = () => {
     }
   };
 
-  // Group lessons by category for sidebar
+  // Filter lessons for sidebar
   const filteredLessons = currentLessons.filter(l => 
     l.title.toLowerCase().includes(sidebarSearch.toLowerCase()) ||
     l.summary.toLowerCase().includes(sidebarSearch.toLowerCase())
   );
-
   const categories = [...new Set(filteredLessons.map(l => l.category))];
 
+  // Course Progress Stats
+  const courseCompletedCount = currentLessons.filter(l => completedExercises.includes(l.id)).length;
+  const courseProgressPct = Math.round((courseCompletedCount / currentLessons.length) * 100);
+
+  // Cheat Sheet Data for active language
+  const cheatItems = SYNTAX_CHEAT_SHEETS[selectedLang] || [];
+  const cheatCategories = ['all', ...new Set(cheatItems.map(c => c.category))];
+  const filteredCheatItems = cheatItems.filter(c => {
+    const matchesSearch = c.name.toLowerCase().includes(cheatSearch.toLowerCase()) ||
+                          c.desc.toLowerCase().includes(cheatSearch.toLowerCase()) ||
+                          c.syntax.toLowerCase().includes(cheatSearch.toLowerCase());
+    const matchesCat = cheatCategory === 'all' || c.category === cheatCategory;
+    return matchesSearch && matchesCat;
+  });
+
   return (
-    <div className="space-y-4 pb-16 md:pb-6">
+    <div className="space-y-5 pb-16 md:pb-8 animate-fadeIn">
       
-      {/* 1. Top W3-Style Green Navigation Bar */}
+      {/* ------------------------------------------------------------- */}
+      {/* 1. TOP W3 BAR & LANGUAGE SELECTOR */}
+      {/* ------------------------------------------------------------- */}
       <div className="rounded-2xl glass-panel border border-emerald-500/20 bg-slate-950 p-2 sm:p-2.5 shadow-xl flex items-center justify-between gap-2 overflow-x-auto touch-scroll">
-        <div className="flex items-center gap-1.5 sm:gap-2">
-          <button
-            onClick={() => setSidebarOpen(!sidebarOpen)}
-            className="md:hidden p-2 rounded-xl bg-slate-900 border border-slate-800 text-slate-300 hover:text-white"
-            title="Toggle Lessons Menu"
-          >
-            {sidebarOpen ? <X size={18} /> : <Menu size={18} />}
-          </button>
+        <div className="flex items-center gap-1.5 sm:gap-2 shrink-0">
+          {activeTab === 'tutorials' && (
+            <button
+              onClick={() => setSidebarOpen(!sidebarOpen)}
+              className="md:hidden p-2 rounded-xl bg-slate-900 border border-slate-800 text-slate-300 hover:text-white min-h-[40px] min-w-[40px] flex items-center justify-center touch-manipulation"
+              title="Toggle Lessons Menu"
+            >
+              {sidebarOpen ? <X size={18} /> : <Menu size={18} />}
+            </button>
+          )}
           
-          <div className="hidden sm:flex items-center gap-1.5 px-3 py-1 bg-emerald-500/10 border border-emerald-500/30 rounded-xl text-emerald-400 font-mono text-xs font-bold">
+          <div className="flex items-center gap-1.5 px-3 py-1 bg-emerald-500/10 border border-emerald-500/30 rounded-xl text-emerald-400 font-mono text-xs font-bold">
             <BookOpen size={14} />
-            <span>W3-ACADEMY</span>
+            <span className="hidden sm:inline">W3-ACADEMY</span>
+            <span className="sm:hidden font-mono uppercase">{selectedLang}</span>
           </div>
         </div>
 
@@ -226,7 +285,7 @@ export const StudyAcademy = () => {
               <button
                 key={lang.id}
                 onClick={() => handleSelectLang(lang.id)}
-                className={`px-3 py-1.5 rounded-xl font-mono text-xs font-bold uppercase transition-all whitespace-nowrap ${
+                className={`px-3 py-1.5 rounded-xl font-mono text-xs font-bold uppercase transition-all whitespace-nowrap min-h-[38px] touch-manipulation ${
                   isSelected
                     ? 'bg-emerald-500 text-slate-950 shadow-[0_0_12px_rgba(16,185,129,0.5)] font-black'
                     : 'text-slate-400 hover:text-slate-200 hover:bg-slate-900'
@@ -239,390 +298,606 @@ export const StudyAcademy = () => {
         </div>
       </div>
 
-      {/* 2. Main Layout: Left W3 Sidebar + Right Content Area */}
-      <div className="grid grid-cols-1 md:grid-cols-12 gap-6 items-start">
+      {/* ------------------------------------------------------------- */}
+      {/* 2. MODE SWITCHER TABS & COURSE PROGRESS BAR */}
+      {/* ------------------------------------------------------------- */}
+      <div className="flex flex-col sm:flex-row items-center justify-between gap-3 p-2 sm:p-3 rounded-2xl glass-panel bg-slate-950/80 border border-slate-800 shadow-md">
         
-        {/* Left W3 Sidebar (Drawer on mobile, Sticky on desktop) */}
-        <aside className={`
-          fixed md:relative inset-y-0 left-0 z-40 md:z-auto w-72 md:w-full md:col-span-3 lg:col-span-3
-          glass-panel bg-slate-950 md:bg-slate-950/80 border border-slate-800 rounded-none md:rounded-2xl p-4
-          transition-transform duration-300 overflow-y-auto touch-scroll max-h-[85vh]
-          ${sidebarOpen ? 'translate-x-0 shadow-2xl' : '-translate-x-full md:translate-x-0'}
-        `}>
+        {/* Tab Buttons */}
+        <div className="flex items-center gap-1.5 w-full sm:w-auto">
+          <button
+            onClick={() => {
+              sound.playClick();
+              setActiveTab('tutorials');
+            }}
+            className={`flex-1 sm:flex-none px-4 py-2 rounded-xl text-xs font-bold font-mono flex items-center justify-center gap-2 transition-all min-h-[42px] touch-manipulation ${
+              activeTab === 'tutorials'
+                ? 'bg-emerald-500 text-slate-950 shadow-md font-black'
+                : 'text-slate-400 hover:text-white hover:bg-slate-900'
+            }`}
+          >
+            <BookOpen size={14} />
+            <span>Course Tutorials</span>
+          </button>
+
+          <button
+            onClick={() => {
+              sound.playClick();
+              setActiveTab('exams');
+            }}
+            className={`flex-1 sm:flex-none px-4 py-2 rounded-xl text-xs font-bold font-mono flex items-center justify-center gap-2 transition-all min-h-[42px] touch-manipulation ${
+              activeTab === 'exams'
+                ? 'bg-gradient-to-r from-emerald-500 to-teal-400 text-slate-950 shadow-md font-black'
+                : 'text-slate-400 hover:text-white hover:bg-slate-900'
+            }`}
+          >
+            <GraduationCap size={15} />
+            <span>MCQ Certification Exam</span>
+            <span className="hidden md:inline px-1.5 py-0.2 rounded-full bg-slate-900 text-emerald-300 text-[10px] font-bold">
+              CERT
+            </span>
+          </button>
+
+          <button
+            onClick={() => {
+              sound.playClick();
+              setActiveTab('cheatsheet');
+            }}
+            className={`flex-1 sm:flex-none px-4 py-2 rounded-xl text-xs font-bold font-mono flex items-center justify-center gap-2 transition-all min-h-[42px] touch-manipulation ${
+              activeTab === 'cheatsheet'
+                ? 'bg-cyan-500 text-slate-950 shadow-md font-black'
+                : 'text-slate-400 hover:text-white hover:bg-slate-900'
+            }`}
+          >
+            <Terminal size={14} />
+            <span>Syntax Quick-Ref</span>
+          </button>
+        </div>
+
+        {/* Course Progress Metric */}
+        {activeTab === 'tutorials' && (
+          <div className="flex items-center gap-3 w-full sm:w-auto justify-between sm:justify-end px-2 sm:px-0">
+            <div className="flex items-center gap-2 text-xs font-mono">
+              <span className="text-slate-400">Track Progress:</span>
+              <span className="text-emerald-400 font-bold">{courseCompletedCount} / {currentLessons.length}</span>
+              <span className="text-[11px] text-slate-500">({courseProgressPct}%)</span>
+            </div>
+            
+            <div className="w-24 sm:w-32 h-2 rounded-full bg-slate-900 overflow-hidden border border-slate-800">
+              <div 
+                className="h-full bg-gradient-to-r from-emerald-500 to-teal-400 rounded-full transition-all duration-500"
+                style={{ width: `${courseProgressPct}%` }}
+              />
+            </div>
+          </div>
+        )}
+      </div>
+
+      {/* ------------------------------------------------------------- */}
+      {/* 3. TAB VIEW: MCQ EXAM CENTER */}
+      {/* ------------------------------------------------------------- */}
+      {activeTab === 'exams' && (
+        <ExamCenter 
+          defaultTrack={selectedLang} 
+          onSwitchToTutorials={() => setActiveTab('tutorials')} 
+        />
+      )}
+
+      {/* ------------------------------------------------------------- */}
+      {/* 4. TAB VIEW: SYNTAX QUICK-REFERENCE CHEAT SHEET */}
+      {/* ------------------------------------------------------------- */}
+      {activeTab === 'cheatsheet' && (
+        <div className="space-y-6 animate-fadeIn pb-12">
           
-          {/* Mobile close button */}
-          <div className="md:hidden flex items-center justify-between pb-3 mb-3 border-b border-slate-800">
-            <span className="font-bold text-sm text-white">Select Topic</span>
-            <button onClick={() => setSidebarOpen(false)} className="text-slate-400">
-              <X size={18} />
-            </button>
+          {/* Header Banner */}
+          <div className="p-6 sm:p-8 rounded-3xl bg-slate-950/90 border border-cyan-500/30 shadow-xl space-y-3">
+            <div className="flex items-center justify-between flex-wrap gap-2">
+              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-cyan-500/10 border border-cyan-500/30 text-cyan-400 font-mono text-xs font-bold">
+                <Terminal size={14} />
+                <span>RAPID REFERENCE GUIDE &bull; {selectedLang.toUpperCase()}</span>
+              </div>
+              <span className="text-xs font-mono text-slate-400">
+                {filteredCheatItems.length} syntax references
+              </span>
+            </div>
+
+            <h2 className="text-2xl sm:text-3xl font-black text-white">
+              {selectedLang.toUpperCase()} Syntax Quick-Reference Cheat Sheet
+            </h2>
+            <p className="text-xs sm:text-sm text-slate-300">
+              Instantly search, copy, and inspect canonical W3-standard syntax, parameters, and descriptions for all core elements and keywords.
+            </p>
+
+            {/* Search and Category Filter */}
+            <div className="flex flex-col sm:flex-row items-center gap-3 pt-3">
+              <div className="relative w-full sm:flex-1">
+                <Search size={15} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-500" />
+                <input
+                  type="text"
+                  value={cheatSearch}
+                  onChange={(e) => setCheatSearch(e.target.value)}
+                  placeholder={`Search ${selectedLang.toUpperCase()} tags, functions, syntax...`}
+                  className="w-full pl-9 pr-4 py-2.5 rounded-xl bg-slate-900 border border-slate-800 text-xs text-white placeholder:text-slate-500 focus:outline-none focus:border-cyan-400"
+                />
+              </div>
+
+              {/* Category Pills */}
+              <div className="flex items-center gap-1.5 overflow-x-auto touch-scroll w-full sm:w-auto pb-1 sm:pb-0">
+                {cheatCategories.map(cat => (
+                  <button
+                    key={cat}
+                    onClick={() => {
+                      sound.playClick();
+                      setCheatCategory(cat);
+                    }}
+                    className={`px-3 py-1.5 rounded-xl font-mono text-[11px] font-bold uppercase whitespace-nowrap transition-all min-h-[36px] touch-manipulation ${
+                      cheatCategory === cat
+                        ? 'bg-cyan-500 text-slate-950 font-black shadow-sm'
+                        : 'bg-slate-900 text-slate-400 hover:text-white border border-slate-800'
+                    }`}
+                  >
+                    {cat}
+                  </button>
+                ))}
+              </div>
+            </div>
           </div>
 
-          {/* Sidebar Search Filter */}
-          <div className="relative mb-4">
-            <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-500" />
-            <input
-              type="text"
-              value={sidebarSearch}
-              onChange={(e) => setSidebarSearch(e.target.value)}
-              placeholder="Filter topics..."
-              className="w-full pl-8 pr-3 py-1.5 rounded-xl bg-slate-900 border border-slate-800 text-xs text-slate-200 focus:outline-none focus:border-emerald-400 placeholder:text-slate-500"
-            />
-          </div>
-
-          {/* Categorized Topic List */}
-          <div className="space-y-4">
-            {categories.map((cat, cIdx) => (
-              <div key={cIdx} className="space-y-1">
-                <div className="text-[11px] font-mono text-emerald-400 font-bold uppercase tracking-wider px-2 py-1">
-                  {cat}
+          {/* Syntax Grid */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            {filteredCheatItems.map((item, idx) => (
+              <div 
+                key={idx}
+                className="p-5 rounded-2xl bg-slate-950/80 border border-slate-800 hover:border-cyan-500/40 hover:bg-slate-900/60 transition-all space-y-3 group"
+              >
+                <div className="flex items-center justify-between gap-2">
+                  <span className="font-mono text-sm font-black text-cyan-300">
+                    {item.name}
+                  </span>
+                  <span className="px-2 py-0.5 rounded-full bg-slate-900 border border-slate-800 text-[10px] font-mono font-bold text-slate-400">
+                    {item.category}
+                  </span>
                 </div>
-                <div className="space-y-0.5">
-                  {filteredLessons.filter(l => l.category === cat).map((item) => {
-                    const isActive = item.id === lesson.id;
-                    const isDone = completedExercises.includes(item.id);
 
-                    return (
-                      <button
-                        key={item.id}
-                        onClick={() => handleSelectLesson(item.id)}
-                        className={`w-full text-left px-3 py-1.5 rounded-xl text-xs font-medium transition-all flex items-center justify-between ${
-                          isActive
-                            ? 'bg-emerald-500/20 text-emerald-300 font-bold border-l-4 border-emerald-400 shadow-sm'
-                            : 'text-slate-300 hover:text-white hover:bg-slate-900/60'
-                        }`}
-                      >
-                        <span className="truncate">{item.title}</span>
-                        {isDone && <CheckCircle2 size={13} className="text-emerald-400 shrink-0 ml-1" />}
-                      </button>
-                    );
-                  })}
+                <div className="relative p-3 rounded-xl bg-slate-900/90 border border-slate-800 font-mono text-xs text-emerald-300 overflow-x-auto touch-scroll flex items-center justify-between gap-2">
+                  <code className="whitespace-pre-wrap">{item.syntax}</code>
+                  <button
+                    onClick={() => {
+                      sound.playClick();
+                      navigator.clipboard.writeText(item.syntax);
+                      setCopiedSyntax(item.name);
+                      setTimeout(() => setCopiedSyntax(null), 1500);
+                    }}
+                    className="shrink-0 p-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-400 hover:text-white transition-colors"
+                    title="Copy Syntax"
+                  >
+                    {copiedSyntax === item.name ? <Check size={13} className="text-emerald-400" /> : <Copy size={13} />}
+                  </button>
                 </div>
+
+                <p className="text-xs text-slate-300 leading-relaxed font-sans">
+                  {item.desc}
+                </p>
               </div>
             ))}
           </div>
-        </aside>
 
-        {/* Right W3 Lesson Reader Area */}
-        <main className="md:col-span-9 lg:col-span-9 space-y-6">
+        </div>
+      )}
+
+      {/* ------------------------------------------------------------- */}
+      {/* 5. TAB VIEW: COURSE TUTORIALS & STORY MODE (Default) */}
+      {/* ------------------------------------------------------------- */}
+      {activeTab === 'tutorials' && (
+        <div className="grid grid-cols-1 md:grid-cols-12 gap-6 items-start">
           
-          {/* Top Pagination Row: Previous & Next */}
-          <div className="glass-panel p-3 rounded-2xl border border-slate-800 flex items-center justify-between gap-2">
-            <button
-              onClick={handlePrev}
-              disabled={safeIndex === 0}
-              className={`px-3.5 py-1.5 rounded-xl text-xs font-bold flex items-center gap-1 transition-all ${
-                safeIndex > 0 
-                  ? 'bg-emerald-600 hover:bg-emerald-500 text-white shadow-sm active:scale-95' 
-                  : 'bg-slate-900 text-slate-600 cursor-not-allowed border border-slate-800'
-              }`}
-            >
-              <ChevronLeft size={16} />
-              <span>&lt; Previous</span>
-            </button>
-
-            <span className="text-xs font-mono text-slate-400">
-              {safeIndex + 1} / {currentLessons.length}
-            </span>
-
-            <button
-              onClick={handleNext}
-              disabled={safeIndex === currentLessons.length - 1}
-              className={`px-3.5 py-1.5 rounded-xl text-xs font-bold flex items-center gap-1 transition-all ${
-                safeIndex < currentLessons.length - 1 
-                  ? 'bg-emerald-600 hover:bg-emerald-500 text-white shadow-sm active:scale-95' 
-                  : 'bg-slate-900 text-slate-600 cursor-not-allowed border border-slate-800'
-              }`}
-            >
-              <span>Next &gt;</span>
-              <ChevronRight size={16} />
-            </button>
-          </div>
-
-          {/* Lesson Header */}
-          <div className="glass-panel p-6 sm:p-8 rounded-3xl border border-slate-800 space-y-3">
-            <div className="text-xs font-mono text-emerald-400 font-bold uppercase tracking-wider">
-              {lesson.category}
+          {/* Left W3 Sidebar (Drawer on mobile, Sticky on desktop) */}
+          <aside className={`
+            fixed md:relative inset-y-0 left-0 z-40 md:z-auto w-72 md:w-full md:col-span-3 lg:col-span-3
+            glass-panel bg-slate-950 md:bg-slate-950/80 border border-slate-800 rounded-none md:rounded-2xl p-4
+            transition-transform duration-300 overflow-y-auto touch-scroll max-h-[85vh]
+            ${sidebarOpen ? 'translate-x-0 shadow-2xl' : '-translate-x-full md:translate-x-0'}
+          `}>
+            
+            {/* Mobile close button */}
+            <div className="md:hidden flex items-center justify-between pb-3 mb-3 border-b border-slate-800">
+              <span className="font-bold text-sm text-white flex items-center gap-2">
+                <BookOpen size={16} className="text-emerald-400" />
+                <span>Select Lesson</span>
+              </span>
+              <button 
+                onClick={() => setSidebarOpen(false)} 
+                className="text-slate-400 hover:text-white p-1 rounded-lg bg-slate-900 border border-slate-800"
+              >
+                <X size={18} />
+              </button>
             </div>
-            <h1 className="text-2xl sm:text-3xl font-black text-white tracking-tight">
-              {lesson.title}
-            </h1>
-            <p className="text-sm sm:text-base text-slate-300 leading-relaxed font-sans">
-              {lesson.summary}
-            </p>
-          </div>
 
-          {/* 👶 EXPLAIN LIKE I'M 5 (Super Simple Story & Real-World Analogy) */}
-          {lesson.eli5 && (
-            <div className="glass-panel p-6 sm:p-7 rounded-3xl border border-amber-500/30 bg-gradient-to-br from-amber-950/20 via-slate-900/90 to-slate-950 shadow-xl space-y-4">
-              <div className="flex items-center justify-between flex-wrap gap-2 pb-2 border-b border-amber-500/20">
-                <span className="text-xs font-mono text-amber-400 font-bold uppercase tracking-wider flex items-center gap-2">
-                  <span className="text-lg">👶</span>
-                  <span>Explain Like I'm 5 (Super Simple Concept)</span>
+            {/* Sidebar Search Filter */}
+            <div className="relative mb-4">
+              <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-500" />
+              <input
+                type="text"
+                value={sidebarSearch}
+                onChange={(e) => setSidebarSearch(e.target.value)}
+                placeholder="Filter topics..."
+                className="w-full pl-8 pr-3 py-2 rounded-xl bg-slate-900 border border-slate-800 text-xs text-slate-200 focus:outline-none focus:border-emerald-400 placeholder:text-slate-500"
+              />
+            </div>
+
+            {/* Categorized Topic List */}
+            <div className="space-y-4">
+              {categories.map((cat, cIdx) => (
+                <div key={cIdx} className="space-y-1">
+                  <div className="text-[11px] font-mono text-emerald-400 font-bold uppercase tracking-wider px-2 py-1">
+                    {cat}
+                  </div>
+                  <div className="space-y-0.5">
+                    {filteredLessons.filter(l => l.category === cat).map((item) => {
+                      const isActive = item.id === lesson.id;
+                      const isDone = completedExercises.includes(item.id);
+
+                      return (
+                        <button
+                          key={item.id}
+                          onClick={() => handleSelectLesson(item.id)}
+                          className={`w-full text-left px-3 py-2 rounded-xl text-xs font-medium transition-all flex items-center justify-between min-h-[38px] touch-manipulation ${
+                            isActive
+                              ? 'bg-emerald-500/20 text-emerald-300 font-bold border-l-4 border-emerald-400 shadow-sm'
+                              : 'text-slate-300 hover:text-white hover:bg-slate-900/60'
+                          }`}
+                        >
+                          <span className="truncate">{item.title}</span>
+                          {isDone && <CheckCircle2 size={13} className="text-emerald-400 shrink-0 ml-1" />}
+                        </button>
+                      );
+                    })}
+                  </div>
+                </div>
+              ))}
+            </div>
+          </aside>
+
+          {/* Right W3 Lesson Reader Area */}
+          <main className="md:col-span-9 lg:col-span-9 space-y-6">
+            
+            {/* Top Pagination Row: Previous & Next */}
+            <div className="glass-panel p-3 rounded-2xl border border-slate-800 flex items-center justify-between gap-2">
+              <button
+                onClick={handlePrev}
+                disabled={safeIndex === 0}
+                className={`px-4 py-2 rounded-xl text-xs font-bold flex items-center gap-1.5 transition-all min-h-[42px] touch-manipulation ${
+                  safeIndex > 0 
+                    ? 'bg-emerald-600 hover:bg-emerald-500 text-white shadow-sm active:scale-95' 
+                    : 'bg-slate-900 text-slate-600 cursor-not-allowed border border-slate-800'
+                }`}
+              >
+                <ChevronLeft size={16} />
+                <span>&lt; Previous</span>
+              </button>
+
+              <div className="flex items-center gap-2">
+                <span className="text-xs font-mono text-slate-400">
+                  {safeIndex + 1} / {currentLessons.length}
+                </span>
+                {completedExercises.includes(lesson.id) && (
+                  <span className="px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-400 text-[10px] font-mono font-bold flex items-center gap-1">
+                    <CheckCircle2 size={11} /> Mastered
+                  </span>
+                )}
+              </div>
+
+              <button
+                onClick={handleNext}
+                disabled={safeIndex === currentLessons.length - 1}
+                className={`px-4 py-2 rounded-xl text-xs font-bold flex items-center gap-1.5 transition-all min-h-[42px] touch-manipulation ${
+                  safeIndex < currentLessons.length - 1 
+                    ? 'bg-emerald-600 hover:bg-emerald-500 text-white shadow-sm active:scale-95' 
+                    : 'bg-slate-900 text-slate-600 cursor-not-allowed border border-slate-800'
+                }`}
+              >
+                <span>Next &gt;</span>
+                <ChevronRight size={16} />
+              </button>
+            </div>
+
+            {/* Lesson Header */}
+            <div className="glass-panel p-6 sm:p-8 rounded-3xl border border-slate-800 space-y-3">
+              <div className="text-xs font-mono text-emerald-400 font-bold uppercase tracking-wider">
+                {lesson.category}
+              </div>
+              <h1 className="text-2xl sm:text-3xl font-black text-white tracking-tight">
+                {lesson.title}
+              </h1>
+              <p className="text-sm sm:text-base text-slate-300 leading-relaxed font-sans">
+                {lesson.summary}
+              </p>
+            </div>
+
+            {/* 👶 EXPLAIN LIKE I'M 5 (Super Simple Story & Real-World Analogy) */}
+            {lesson.eli5 && (
+              <div className="glass-panel p-6 sm:p-7 rounded-3xl border border-amber-500/30 bg-gradient-to-br from-amber-950/20 via-slate-900/90 to-slate-950 shadow-xl space-y-4">
+                <div className="flex items-center justify-between flex-wrap gap-2 pb-2 border-b border-amber-500/20">
+                  <span className="text-xs font-mono text-amber-400 font-bold uppercase tracking-wider flex items-center gap-2">
+                    <span className="text-lg">👶</span>
+                    <span>Explain Like I'm 5 (Super Simple Concept)</span>
+                  </span>
+                  
+                  <div className="flex items-center gap-2">
+                    {/* Interactive Audio Narration for Kids & Beginners */}
+                    <button
+                      onClick={() => {
+                        const textToRead = `${lesson.title}. Story: ${lesson.eli5.story}. Analogy: ${lesson.eli5.analogy || ''}. Rule 1: ${lesson.eli5.rules?.[0] || ''}. Rule 2: ${lesson.eli5.rules?.[1] || ''}. Rule 3: ${lesson.eli5.rules?.[2] || ''}`;
+                        handleToggleSpeech(textToRead);
+                      }}
+                      className={`px-3 py-1.5 rounded-full text-xs font-bold font-mono flex items-center gap-1.5 transition-all active:scale-95 shadow-md min-h-[36px] touch-manipulation ${
+                        isSpeaking 
+                          ? 'bg-rose-500 text-white animate-pulse' 
+                          : 'bg-amber-500/20 text-amber-300 hover:bg-amber-500/30 border border-amber-500/40'
+                      }`}
+                      title="Click to have this explanation read aloud"
+                    >
+                      {isSpeaking ? <VolumeX size={14} /> : <Volume2 size={14} />}
+                      <span>{isSpeaking ? 'Stop Reading' : '🔊 Read Aloud for Kids'}</span>
+                    </button>
+
+                    <span className="text-[11px] text-amber-300/80 font-mono font-semibold bg-amber-500/10 px-2.5 py-0.5 rounded-full border border-amber-500/30">
+                      Easy Story Mode
+                    </span>
+                  </div>
+                </div>
+
+                {/* Story */}
+                <div className="text-sm text-slate-200 leading-relaxed font-sans bg-slate-900/60 p-4 rounded-2xl border border-slate-800">
+                  <p className="font-medium text-amber-200/90 text-xs font-mono uppercase mb-1">📖 The Fun Story:</p>
+                  {lesson.eli5.story}
+                </div>
+
+                {/* Real World Analogy */}
+                {lesson.eli5.analogy && (
+                  <div className="p-3.5 rounded-2xl bg-gradient-to-r from-amber-500/10 to-orange-500/10 border border-amber-500/30 text-xs sm:text-sm text-amber-300 font-semibold flex items-center gap-2.5">
+                    <span>{lesson.eli5.analogy}</span>
+                  </div>
+                )}
+
+                {/* 3 Simple Rules */}
+                {lesson.eli5.rules && (
+                  <div className="space-y-1.5 pt-1">
+                    <span className="text-[11px] font-mono text-slate-400 font-bold uppercase tracking-wider block">
+                      3 Simple Rules Anyone Can Remember:
+                    </span>
+                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
+                      {lesson.eli5.rules.map((rule, rIdx) => (
+                        <div key={rIdx} className="p-2.5 rounded-xl bg-slate-950/80 border border-slate-800 text-xs text-slate-300 flex items-start gap-2">
+                          <span className="text-amber-400 font-bold font-mono">#{rIdx + 1}</span>
+                          <span>{rule}</span>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
+              </div>
+            )}
+
+            {/* SIGNATURE W3 "Try it Yourself »" BOX */}
+            <div className="rounded-2xl sm:rounded-3xl border border-slate-800 bg-slate-950 overflow-hidden shadow-2xl space-y-0">
+              
+              {/* Box Header */}
+              <div className="bg-slate-900 px-5 py-3 border-b border-slate-800 flex items-center justify-between flex-wrap gap-2">
+                <span className="text-xs font-bold text-white font-mono flex items-center gap-2">
+                  <Code2 size={16} className="text-emerald-400" />
+                  <span>Example: {lesson.title}</span>
                 </span>
                 
                 <div className="flex items-center gap-2">
-                  {/* Interactive Audio Narration for Kids & Beginners */}
                   <button
-                    onClick={() => {
-                      const textToRead = `${lesson.title}. Story: ${lesson.eli5.story}. Analogy: ${lesson.eli5.analogy || ''}. Rule 1: ${lesson.eli5.rules?.[0] || ''}. Rule 2: ${lesson.eli5.rules?.[1] || ''}. Rule 3: ${lesson.eli5.rules?.[2] || ''}`;
-                      handleToggleSpeech(textToRead);
-                    }}
-                    className={`px-3 py-1.5 rounded-full text-xs font-bold font-mono flex items-center gap-1.5 transition-all active:scale-95 shadow-md ${
-                      isSpeaking 
-                        ? 'bg-rose-500 text-white animate-pulse' 
-                        : 'bg-amber-500/20 text-amber-300 hover:bg-amber-500/30 border border-amber-500/40'
-                    }`}
-                    title="Click to have this explanation read aloud"
+                    onClick={handleResetCode}
+                    className="px-2.5 py-1 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs flex items-center gap-1 min-h-[32px] touch-manipulation"
+                    title="Reset to Original Code"
                   >
-                    {isSpeaking ? <VolumeX size={14} /> : <Volume2 size={14} />}
-                    <span>{isSpeaking ? 'Stop Reading' : '🔊 Read Aloud for Kids'}</span>
+                    <RotateCcw size={12} />
+                    <span>Reset</span>
                   </button>
 
-                  <span className="text-[11px] text-amber-300/80 font-mono font-semibold bg-amber-500/10 px-2.5 py-0.5 rounded-full border border-amber-500/30">
-                    Easy Story Mode
-                  </span>
+                  <button
+                    onClick={handleCopy}
+                    className="px-2.5 py-1 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs flex items-center gap-1 min-h-[32px] touch-manipulation"
+                  >
+                    {copied ? <Check size={13} className="text-emerald-400" /> : <Copy size={13} />}
+                    <span>{copied ? 'Copied' : 'Copy'}</span>
+                  </button>
                 </div>
               </div>
 
-              {/* Story */}
-              <div className="text-sm text-slate-200 leading-relaxed font-sans bg-slate-900/60 p-4 rounded-2xl border border-slate-800">
-                <p className="font-medium text-amber-200/90 text-xs font-mono uppercase mb-1">📖 The Fun Story:</p>
-                {lesson.eli5.story}
+              {/* Editable Code Input */}
+              <div className="p-4 sm:p-5 bg-slate-950">
+                <textarea
+                  value={editableCode}
+                  onChange={(e) => setEditableCode(e.target.value)}
+                  className="w-full h-44 sm:h-52 p-3.5 rounded-xl bg-slate-900 border border-slate-800 text-emerald-300 font-mono text-xs focus:outline-none focus:border-emerald-400 leading-relaxed resize-y"
+                  spellCheck="false"
+                />
+
+                {/* Prominent Green W3-Style "Try it Yourself »" Button */}
+                <div className="mt-3 flex items-center justify-between flex-wrap gap-2">
+                  <button
+                    onClick={handleRunTryIt}
+                    className="px-6 py-2.5 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-black text-sm shadow-[0_0_20px_rgba(16,185,129,0.4)] flex items-center gap-2 transition-transform active:scale-95 min-h-[44px] touch-manipulation"
+                  >
+                    <Play size={15} className="fill-current" />
+                    <span>Try it Yourself &raquo;</span>
+                  </button>
+                  <span className="text-[11px] text-slate-500 font-mono">Edit code above and click to test</span>
+                </div>
               </div>
 
-              {/* Real World Analogy */}
-              {lesson.eli5.analogy && (
-                <div className="p-3.5 rounded-2xl bg-gradient-to-r from-amber-500/10 to-orange-500/10 border border-amber-500/30 text-xs sm:text-sm text-amber-300 font-semibold flex items-center gap-2.5">
-                  <span>{lesson.eli5.analogy}</span>
+              {/* Output Viewport if run */}
+              {tryItOutput && (
+                <div className="border-t border-slate-800 p-4 sm:p-5 bg-slate-900/90 font-mono text-xs animate-fadeIn">
+                  <div className="text-[11px] font-bold text-emerald-400 uppercase tracking-widest mb-2 flex items-center gap-1.5">
+                    <span className="w-2 h-2 rounded-full bg-emerald-400 animate-ping"></span>
+                    <span>Live Result / Preview:</span>
+                  </div>
+
+                  {tryItOutput.type === 'html' ? (
+                    <div 
+                      className="p-4 rounded-xl bg-slate-950 border border-slate-800 text-white min-h-[140px] overflow-auto"
+                      dangerouslySetInnerHTML={{ __html: tryItOutput.content }}
+                    />
+                  ) : (
+                    <pre className={`p-3.5 rounded-xl bg-slate-950 border border-slate-800 whitespace-pre-wrap overflow-x-auto ${
+                      tryItOutput.type === 'error' ? 'text-rose-400' : 'text-emerald-300'
+                    }`}>
+                      {tryItOutput.content}
+                    </pre>
+                  )}
+                </div>
+              )}
+            </div>
+
+            {/* Deep Lesson Body Content */}
+            <div className="glass-panel p-6 sm:p-8 rounded-3xl border border-slate-800 space-y-4">
+              <div className="text-sm text-slate-200 leading-relaxed font-sans whitespace-pre-line">
+                {lesson.body}
+              </div>
+
+              {/* Callout Boxes (Tip / Note) */}
+              {lesson.tips && (
+                <div className="p-4 rounded-2xl bg-amber-500/10 border-l-4 border-amber-400 text-amber-200 text-xs sm:text-sm flex items-start gap-3">
+                  <Lightbulb size={20} className="shrink-0 text-amber-400 mt-0.5" />
+                  <div>
+                    <strong className="block text-amber-300 font-bold mb-0.5">Tip:</strong>
+                    <span>{lesson.tips}</span>
+                  </div>
                 </div>
               )}
 
-              {/* 3 Simple Rules */}
-              {lesson.eli5.rules && (
-                <div className="space-y-1.5 pt-1">
-                  <span className="text-[11px] font-mono text-slate-400 font-bold uppercase tracking-wider block">
-                    3 Simple Rules Anyone Can Remember:
-                  </span>
-                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
-                    {lesson.eli5.rules.map((rule, rIdx) => (
-                      <div key={rIdx} className="p-2.5 rounded-xl bg-slate-950/80 border border-slate-800 text-xs text-slate-300 flex items-start gap-2">
-                        <span className="text-amber-400 font-bold font-mono">#{rIdx + 1}</span>
-                        <span>{rule}</span>
-                      </div>
-                    ))}
+              {lesson.notes && (
+                <div className="p-4 rounded-2xl bg-cyan-500/10 border-l-4 border-cyan-400 text-cyan-200 text-xs sm:text-sm flex items-start gap-3">
+                  <Info size={20} className="shrink-0 text-cyan-400 mt-0.5" />
+                  <div>
+                    <strong className="block text-cyan-300 font-bold mb-0.5">Note:</strong>
+                    <span>{lesson.notes}</span>
                   </div>
                 </div>
               )}
             </div>
-          )}
 
-          {/* SIGNATURE W3 "Try it Yourself »" BOX */}
-          <div className="rounded-2xl sm:rounded-3xl border border-slate-800 bg-slate-950 overflow-hidden shadow-2xl space-y-0">
-            
-            {/* Box Header */}
-            <div className="bg-slate-900 px-5 py-3 border-b border-slate-800 flex items-center justify-between flex-wrap gap-2">
-              <span className="text-xs font-bold text-white font-mono flex items-center gap-2">
-                <Code2 size={16} className="text-emerald-400" />
-                <span>Example: {lesson.title}</span>
-              </span>
-              <button
-                onClick={handleCopy}
-                className="px-2.5 py-1 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs flex items-center gap-1"
-              >
-                {copied ? <Check size={13} className="text-emerald-400" /> : <Copy size={13} />}
-                <span>{copied ? 'Copied' : 'Copy Code'}</span>
-              </button>
-            </div>
-
-            {/* Editable Code Input */}
-            <div className="p-4 sm:p-5 bg-slate-950">
-              <textarea
-                value={editableCode}
-                onChange={(e) => setEditableCode(e.target.value)}
-                className="w-full h-44 sm:h-52 p-3.5 rounded-xl bg-slate-900 border border-slate-800 text-emerald-300 font-mono text-xs focus:outline-none focus:border-emerald-400 leading-relaxed resize-y"
-                spellCheck="false"
-              />
-
-              {/* Prominent Green W3-Style "Try it Yourself »" Button */}
-              <div className="mt-3 flex items-center justify-between flex-wrap gap-2">
-                <button
-                  onClick={handleRunTryIt}
-                  className="px-6 py-2.5 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-black text-sm shadow-[0_0_20px_rgba(16,185,129,0.4)] flex items-center gap-2 transition-transform active:scale-95"
-                >
-                  <Play size={15} className="fill-current" />
-                  <span>Try it Yourself &raquo;</span>
-                </button>
-                <span className="text-[11px] text-slate-500 font-mono">Edit code above and click to test</span>
+            {/* Reference Table if available */}
+            {lesson.referenceTable && (
+              <div className="glass-panel p-5 sm:p-6 rounded-2xl border border-slate-800 space-y-3">
+                <h3 className="text-sm font-bold text-white uppercase tracking-wider font-mono flex items-center gap-2">
+                  <FileText size={16} className="text-emerald-400" />
+                  <span>Reference Guide</span>
+                </h3>
+                <div className="overflow-x-auto touch-scroll">
+                  <table className="w-full text-left font-mono text-xs border-collapse">
+                    <thead>
+                      <tr className="border-b border-slate-800 text-slate-400">
+                        <th className="p-2.5">Syntax / Element</th>
+                        <th className="p-2.5">Description</th>
+                      </tr>
+                    </thead>
+                    <tbody className="divide-y divide-slate-800/60">
+                      {lesson.referenceTable.map((row, i) => (
+                        <tr key={i} className="hover:bg-slate-900/60">
+                          <td className="p-2.5 text-emerald-300 font-bold">{row.item}</td>
+                          <td className="p-2.5 text-slate-300 font-sans">{row.description}</td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
               </div>
-            </div>
+            )}
 
-            {/* Output Viewport if run */}
-            {tryItOutput && (
-              <div className="border-t border-slate-800 p-4 sm:p-5 bg-slate-900/90 font-mono text-xs animate-fadeIn">
-                <div className="text-[11px] font-bold text-emerald-400 uppercase tracking-widest mb-2 flex items-center gap-1.5">
-                  <span className="w-2 h-2 rounded-full bg-emerald-400 animate-ping"></span>
-                  <span>Live Result / Preview:</span>
+            {/* SIGNATURE W3 "Test Yourself With Exercises" BOX */}
+            {lesson.exercise && (
+              <div className="glass-panel p-6 sm:p-8 rounded-3xl border border-emerald-500/30 bg-gradient-to-br from-slate-900 to-slate-950 space-y-4">
+                <div className="flex items-center justify-between">
+                  <h3 className="text-base font-bold text-white flex items-center gap-2">
+                    <HelpCircle size={18} className="text-emerald-400" />
+                    <span>Test Yourself With Exercises!</span>
+                  </h3>
+                  <span className="text-xs px-2.5 py-0.5 rounded-full bg-emerald-500/20 text-emerald-400 font-mono font-bold">
+                    +30 XP
+                  </span>
                 </div>
 
-                {tryItOutput.type === 'html' ? (
-                  <div 
-                    className="p-4 rounded-xl bg-slate-950 border border-slate-800 text-white min-h-[140px]"
-                    dangerouslySetInnerHTML={{ __html: tryItOutput.content }}
-                  />
-                ) : (
-                  <pre className={`p-3.5 rounded-xl bg-slate-950 border border-slate-800 whitespace-pre-wrap ${
-                    tryItOutput.type === 'error' ? 'text-rose-400' : 'text-emerald-300'
-                  }`}>
-                    {tryItOutput.content}
-                  </pre>
+                <p className="text-xs sm:text-sm font-semibold text-slate-200">
+                  {lesson.exercise.question}
+                </p>
+
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+                  {lesson.exercise.options.map((opt, optIdx) => {
+                    const isSelected = exerciseChoice === optIdx;
+                    return (
+                      <button
+                        key={optIdx}
+                        onClick={() => handleCheckExercise(optIdx)}
+                        className={`text-left p-3.5 rounded-xl border text-xs font-mono transition-all flex items-center justify-between min-h-[46px] touch-manipulation ${
+                          isSelected && exerciseFeedback === 'correct'
+                            ? 'bg-emerald-500/20 border-emerald-400 text-emerald-200 font-bold'
+                            : isSelected && exerciseFeedback === 'wrong'
+                            ? 'bg-rose-500/20 border-rose-400 text-rose-200'
+                            : 'bg-slate-950/80 border-slate-800 text-slate-300 hover:border-slate-700'
+                        }`}
+                      >
+                        <span>{opt}</span>
+                        <span className="text-[10px] text-slate-500 ml-2">
+                          {String.fromCharCode(65 + optIdx)}
+                        </span>
+                      </button>
+                    );
+                  })}
+                </div>
+
+                {exerciseFeedback === 'correct' && (
+                  <div className="p-3.5 rounded-xl bg-emerald-500/20 border border-emerald-500/40 text-emerald-300 text-xs font-semibold flex items-center gap-2 animate-fadeIn">
+                    <CheckCircle2 size={16} />
+                    <span>Correct Answer! You earned +30 XP!</span>
+                  </div>
+                )}
+                {exerciseFeedback === 'wrong' && (
+                  <div className="p-3.5 rounded-xl bg-rose-500/20 border border-rose-500/40 text-rose-300 text-xs font-semibold flex items-center gap-2 animate-fadeIn">
+                    <span>Incorrect. Hint: {lesson.exercise.hint}</span>
+                  </div>
                 )}
               </div>
             )}
-          </div>
 
-          {/* Deep Lesson Body Content */}
-          <div className="glass-panel p-6 sm:p-8 rounded-3xl border border-slate-800 space-y-4">
-            <div className="text-sm text-slate-200 leading-relaxed font-sans whitespace-pre-line">
-              {lesson.body}
+            {/* Bottom Pagination Row: Previous & Next */}
+            <div className="glass-panel p-3 rounded-2xl border border-slate-800 flex items-center justify-between gap-2">
+              <button
+                onClick={handlePrev}
+                disabled={safeIndex === 0}
+                className={`px-4 py-2 rounded-xl text-xs font-bold flex items-center gap-1.5 transition-all min-h-[42px] touch-manipulation ${
+                  safeIndex > 0 
+                    ? 'bg-emerald-600 hover:bg-emerald-500 text-white shadow-sm active:scale-95' 
+                    : 'bg-slate-900 text-slate-600 cursor-not-allowed border border-slate-800'
+                }`}
+              >
+                <ChevronLeft size={16} />
+                <span>&lt; Previous</span>
+              </button>
+
+              <button
+                onClick={handleNext}
+                disabled={safeIndex === currentLessons.length - 1}
+                className={`px-4 py-2 rounded-xl text-xs font-bold flex items-center gap-1.5 transition-all min-h-[42px] touch-manipulation ${
+                  safeIndex < currentLessons.length - 1 
+                    ? 'bg-emerald-600 hover:bg-emerald-500 text-white shadow-sm active:scale-95' 
+                    : 'bg-slate-900 text-slate-600 cursor-not-allowed border border-slate-800'
+                }`}
+              >
+                <span>Next &gt;</span>
+                <ChevronRight size={16} />
+              </button>
             </div>
 
-            {/* Callout Boxes (Tip / Note) */}
-            {lesson.tips && (
-              <div className="p-4 rounded-2xl bg-amber-500/10 border-l-4 border-amber-400 text-amber-200 text-xs sm:text-sm flex items-start gap-3">
-                <Lightbulb size={20} className="shrink-0 text-amber-400 mt-0.5" />
-                <div>
-                  <strong className="block text-amber-300 font-bold mb-0.5">Tip:</strong>
-                  <span>{lesson.tips}</span>
-                </div>
-              </div>
-            )}
-
-            {lesson.notes && (
-              <div className="p-4 rounded-2xl bg-cyan-500/10 border-l-4 border-cyan-400 text-cyan-200 text-xs sm:text-sm flex items-start gap-3">
-                <Info size={20} className="shrink-0 text-cyan-400 mt-0.5" />
-                <div>
-                  <strong className="block text-cyan-300 font-bold mb-0.5">Note:</strong>
-                  <span>{lesson.notes}</span>
-                </div>
-              </div>
-            )}
-          </div>
-
-          {/* Reference Table if available */}
-          {lesson.referenceTable && (
-            <div className="glass-panel p-5 sm:p-6 rounded-2xl border border-slate-800 space-y-3">
-              <h3 className="text-sm font-bold text-white uppercase tracking-wider font-mono flex items-center gap-2">
-                <FileText size={16} className="text-emerald-400" />
-                <span>Reference Guide</span>
-              </h3>
-              <div className="overflow-x-auto touch-scroll">
-                <table className="w-full text-left font-mono text-xs border-collapse">
-                  <thead>
-                    <tr className="border-b border-slate-800 text-slate-400">
-                      <th className="p-2.5">Syntax / Element</th>
-                      <th className="p-2.5">Description</th>
-                    </tr>
-                  </thead>
-                  <tbody className="divide-y divide-slate-800/60">
-                    {lesson.referenceTable.map((row, i) => (
-                      <tr key={i} className="hover:bg-slate-900/60">
-                        <td className="p-2.5 text-emerald-300 font-bold">{row.item}</td>
-                        <td className="p-2.5 text-slate-300 font-sans">{row.description}</td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
-            </div>
-          )}
-
-          {/* SIGNATURE W3 "Test Yourself With Exercises" BOX */}
-          {lesson.exercise && (
-            <div className="glass-panel p-6 sm:p-8 rounded-3xl border border-emerald-500/30 bg-gradient-to-br from-slate-900 to-slate-950 space-y-4">
-              <div className="flex items-center justify-between">
-                <h3 className="text-base font-bold text-white flex items-center gap-2">
-                  <HelpCircle size={18} className="text-emerald-400" />
-                  <span>Test Yourself With Exercises!</span>
-                </h3>
-                <span className="text-xs px-2.5 py-0.5 rounded-full bg-emerald-500/20 text-emerald-400 font-mono font-bold">
-                  +30 XP
-                </span>
-              </div>
-
-              <p className="text-xs sm:text-sm font-semibold text-slate-200">
-                {lesson.exercise.question}
-              </p>
-
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
-                {lesson.exercise.options.map((opt, optIdx) => {
-                  const isSelected = exerciseChoice === optIdx;
-                  return (
-                    <button
-                      key={optIdx}
-                      onClick={() => handleCheckExercise(optIdx)}
-                      className={`text-left p-3 rounded-xl border text-xs font-mono transition-all flex items-center justify-between ${
-                        isSelected && exerciseFeedback === 'correct'
-                          ? 'bg-emerald-500/20 border-emerald-400 text-emerald-200'
-                          : isSelected && exerciseFeedback === 'wrong'
-                          ? 'bg-rose-500/20 border-rose-400 text-rose-200'
-                          : 'bg-slate-950/80 border-slate-800 text-slate-300 hover:border-slate-700'
-                      }`}
-                    >
-                      <span>{opt}</span>
-                      <span className="text-[10px] text-slate-500 ml-2">
-                        {String.fromCharCode(65 + optIdx)}
-                      </span>
-                    </button>
-                  );
-                })}
-              </div>
-
-              {exerciseFeedback === 'correct' && (
-                <div className="p-3 rounded-xl bg-emerald-500/20 border border-emerald-500/40 text-emerald-300 text-xs font-semibold flex items-center gap-2 animate-fadeIn">
-                  <CheckCircle2 size={16} />
-                  <span>Correct Answer! You earned +30 XP!</span>
-                </div>
-              )}
-              {exerciseFeedback === 'wrong' && (
-                <div className="p-3 rounded-xl bg-rose-500/20 border border-rose-500/40 text-rose-300 text-xs font-semibold flex items-center gap-2 animate-fadeIn">
-                  <span>Incorrect. Hint: {lesson.exercise.hint}</span>
-                </div>
-              )}
-            </div>
-          )}
-
-          {/* Bottom Pagination Row: Previous & Next */}
-          <div className="glass-panel p-3 rounded-2xl border border-slate-800 flex items-center justify-between gap-2">
-            <button
-              onClick={handlePrev}
-              disabled={safeIndex === 0}
-              className={`px-3.5 py-1.5 rounded-xl text-xs font-bold flex items-center gap-1 transition-all ${
-                safeIndex > 0 
-                  ? 'bg-emerald-600 hover:bg-emerald-500 text-white shadow-sm active:scale-95' 
-                  : 'bg-slate-900 text-slate-600 cursor-not-allowed border border-slate-800'
-              }`}
-            >
-              <ChevronLeft size={16} />
-              <span>&lt; Previous</span>
-            </button>
-
-            <button
-              onClick={handleNext}
-              disabled={safeIndex === currentLessons.length - 1}
-              className={`px-3.5 py-1.5 rounded-xl text-xs font-bold flex items-center gap-1 transition-all ${
-                safeIndex < currentLessons.length - 1 
-                  ? 'bg-emerald-600 hover:bg-emerald-500 text-white shadow-sm active:scale-95' 
-                  : 'bg-slate-900 text-slate-600 cursor-not-allowed border border-slate-800'
-              }`}
-            >
-              <span>Next &gt;</span>
-              <ChevronRight size={16} />
-            </button>
-          </div>
-
-        </main>
-      </div>
+          </main>
+        </div>
+      )}
 
     </div>
   );

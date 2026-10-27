@@ -349,10 +349,11 @@ Learned Skills:
                 sound.playClick();
                 setShowTemplateModal(true);
               }}
-              className="px-3.5 py-1.5 rounded-xl bg-gradient-to-r from-cyan-500 via-blue-500 to-purple-600 hover:from-cyan-400 hover:to-purple-500 text-slate-950 font-bold text-xs flex items-center gap-1.5 shadow-md active:scale-95 transition-all"
+              className="px-3 py-1.5 sm:px-3.5 sm:py-1.5 rounded-xl bg-gradient-to-r from-cyan-500 via-blue-500 to-purple-600 hover:from-cyan-400 hover:to-purple-500 text-slate-950 font-bold text-xs flex items-center gap-1.5 shadow-md active:scale-95 touch-manipulation transition-all shrink-0"
             >
               <Wand2 size={13} className="text-slate-950 fill-current" />
-              <span>Browse All 15 Templates »</span>
+              <span className="sm:hidden">15 Presets »</span>
+              <span className="hidden sm:inline">Browse All 15 Templates »</span>
             </button>
           </div>
 
@@ -597,38 +598,38 @@ Learned Skills:
       {/* 15 TEMPLATES MODAL DRAWER */}
       {showTemplateModal && (
         <div 
-          className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-6 bg-slate-950/80 backdrop-blur-md animate-fadeIn"
+          className="fixed inset-0 z-50 flex items-center justify-center p-2 sm:p-6 bg-slate-950/80 backdrop-blur-md animate-fadeIn"
           onClick={() => setShowTemplateModal(false)}
         >
           <div 
-            className="w-full max-w-4xl max-h-[90vh] bg-slate-900 border border-cyan-500/30 rounded-2xl sm:rounded-3xl shadow-2xl flex flex-col overflow-hidden"
+            className="w-full max-w-4xl max-h-[92vh] sm:max-h-[90vh] bg-slate-900 border border-cyan-500/30 rounded-2xl sm:rounded-3xl shadow-2xl flex flex-col overflow-hidden"
             onClick={(e) => e.stopPropagation()}
           >
             {/* Modal Header */}
-            <div className="p-4 sm:p-6 border-b border-slate-800 bg-gradient-to-r from-slate-900 via-cyan-950/30 to-purple-950/30 flex items-center justify-between">
+            <div className="p-3.5 sm:p-6 border-b border-slate-800 bg-gradient-to-r from-slate-900 via-cyan-950/30 to-purple-950/30 flex items-start sm:items-center justify-between gap-2">
               <div>
-                <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-cyan-500/20 text-cyan-300 border border-cyan-500/30 text-[11px] font-mono font-bold mb-1">
-                  <Sparkles size={12} />
+                <div className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-cyan-500/20 text-cyan-300 border border-cyan-500/30 text-[10px] sm:text-[11px] font-mono font-bold mb-1">
+                  <Sparkles size={11} />
                   <span>BYTEVERSE TEMPLATE VAULT</span>
                 </div>
-                <h2 className="text-lg sm:text-2xl font-black text-white">
+                <h2 className="text-base sm:text-2xl font-black text-white">
                   1-Click Ready-to-Run Starter Presets
                 </h2>
-                <p className="text-xs text-slate-400 mt-1 max-w-xl">
+                <p className="text-[11px] sm:text-xs text-slate-400 mt-0.5 sm:mt-1 max-w-xl">
                   Pick any full working game, CSS animation, UI widget, or web app. Click to load, hack the code, and see changes in real-time!
                 </p>
               </div>
               <button
                 onClick={() => setShowTemplateModal(false)}
-                className="p-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white transition-colors"
+                className="p-1.5 sm:p-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white transition-colors shrink-0 touch-manipulation"
                 title="Close"
               >
-                <X size={20} />
+                <X size={18} />
               </button>
             </div>
 
             {/* Filter Category Tabs */}
-            <div className="px-4 sm:px-6 py-3 border-b border-slate-800 bg-slate-900/60 flex items-center gap-2 overflow-x-auto touch-scroll">
+            <div className="px-3 sm:px-6 py-2.5 sm:py-3 border-b border-slate-800 bg-slate-900/60 flex items-center gap-1.5 sm:gap-2 overflow-x-auto touch-scroll">
               {['All', 'Mini-Games', 'Visual FX', 'UI & Widgets', 'Web Apps'].map((cat) => {
                 const count = cat === 'All' 
                   ? PLAYGROUND_TEMPLATES.length 
@@ -641,7 +642,7 @@ Learned Skills:
                       sound.playClick();
                       setSelectedTemplateCategory(cat);
                     }}
-                    className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all whitespace-nowrap flex items-center gap-1.5 ${
+                    className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all whitespace-nowrap flex items-center gap-1.5 touch-manipulation ${
                       isActive
                         ? 'bg-cyan-500 text-slate-950 shadow-md font-black'
                         : 'bg-slate-800 text-slate-300 hover:bg-slate-700'
@@ -659,35 +660,35 @@ Learned Skills:
             </div>
 
             {/* Template Cards Grid */}
-            <div className="p-4 sm:p-6 overflow-y-auto space-y-4 max-h-[calc(90vh-190px)]">
+            <div className="p-3 sm:p-6 overflow-y-auto space-y-3 sm:space-y-4 max-h-[calc(92vh-180px)] touch-scroll">
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4">
                 {PLAYGROUND_TEMPLATES
                   .filter(t => selectedTemplateCategory === 'All' || t.category === selectedTemplateCategory)
                   .map((t) => (
                     <div
                       key={t.id}
-                      className="group relative bg-slate-950/70 hover:bg-slate-900 border border-slate-800 hover:border-cyan-500/60 rounded-2xl p-4 transition-all duration-200 flex flex-col justify-between hover:shadow-xl hover:shadow-cyan-500/10"
+                      className="group relative bg-slate-950/70 hover:bg-slate-900 border border-slate-800 hover:border-cyan-500/60 rounded-xl sm:rounded-2xl p-3.5 sm:p-4 transition-all duration-200 flex flex-col justify-between hover:shadow-xl hover:shadow-cyan-500/10"
                     >
                       <div>
                         <div className="flex items-start justify-between gap-2 mb-2">
-                          <div className="text-2xl p-2 rounded-xl bg-slate-900 border border-slate-800 group-hover:scale-110 transition-transform">
+                          <div className="text-xl sm:text-2xl p-1.5 sm:p-2 rounded-xl bg-slate-900 border border-slate-800 group-hover:scale-110 transition-transform">
                             {t.icon}
                           </div>
                           <span className="text-[10px] px-2 py-0.5 rounded-full bg-slate-800 text-cyan-300 font-mono border border-slate-700">
                             {t.category}
                           </span>
                         </div>
-                        <h3 className="font-bold text-white text-sm group-hover:text-cyan-300 transition-colors">
+                        <h3 className="font-bold text-white text-xs sm:text-sm group-hover:text-cyan-300 transition-colors">
                           {t.title}
                         </h3>
-                        <p className="text-xs text-slate-400 mt-1 line-clamp-2 leading-relaxed">
+                        <p className="text-[11px] sm:text-xs text-slate-400 mt-1 line-clamp-2 leading-relaxed">
                           {t.description}
                         </p>
                       </div>
 
                       <button
                         onClick={() => handleLoadTemplate(t)}
-                        className="mt-4 w-full py-2 px-3 rounded-xl bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-slate-950 font-bold text-xs flex items-center justify-center gap-1.5 active:scale-95 transition-all shadow-md"
+                        className="mt-3 sm:mt-4 w-full py-2.5 px-3 rounded-xl bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-slate-950 font-bold text-xs flex items-center justify-center gap-1.5 active:scale-95 touch-manipulation min-h-[44px] transition-all shadow-md"
                       >
                         <Play size={13} className="fill-current" />
                         <span>Launch in Sandbox</span>
